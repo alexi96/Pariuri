@@ -11,7 +11,6 @@ public class Ticket implements Serializable, Comparable<Ticket> {
     protected Integer type;
 
     public Ticket() {
-
     }
 
     public Ticket(Integer id, float value, Integer operation, Integer composed_ticket, Integer type) {
@@ -64,12 +63,14 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     @Override
     public int compareTo(Ticket o) {
-        return this.value.compareTo(o.value);
+        Float tv = this.value;
+        Float ov = o.value;
+        return tv.compareTo(ov);
     }
 
     @Override
     public String toString() {
-        return this.value;
+        return "" + this.value;
     }
 
 }

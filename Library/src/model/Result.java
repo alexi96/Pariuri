@@ -10,7 +10,6 @@ public class Result implements Serializable, Comparable<Result> {
     protected Integer type;
 
     public Result() {
-
     }
 
     public Result(Integer id, float value, Integer game, Integer type) {
@@ -54,12 +53,13 @@ public class Result implements Serializable, Comparable<Result> {
 
     @Override
     public int compareTo(Result o) {
-        return this.value.compareTo(o.value);
+        Float tv = this.value;
+        Float ov = o.value;
+        return tv.compareTo(ov);
     }
 
     @Override
     public String toString() {
-        return this.value;
+        return "" + this.value;
     }
-
 }

@@ -9,7 +9,6 @@ public class ComposedTicket implements Serializable, Comparable<ComposedTicket>{
     protected Integer user;
     
     public ComposedTicket() {
-        
     }
 
     public ComposedTicket(Integer id, Integer game, Integer user) {
@@ -48,6 +47,6 @@ public class ComposedTicket implements Serializable, Comparable<ComposedTicket>{
 
     @Override
     public String toString() {
-        return this.id;
+        return "" + this.id;
     }
 }
