@@ -7,7 +7,7 @@ public class Game implements Serializable, Comparable<Game> {
 
     protected Integer id;
     protected String name;
-    protected Float chance;
+    protected float chance;
     protected Date date;
 
     public Game() {
@@ -17,13 +17,13 @@ public class Game implements Serializable, Comparable<Game> {
         this.id = id;
     }
 
-    public Game(String name, Float chance, Date date) {
+    public Game(String name, float chance, Date date) {
         this.name = name;
         this.chance = chance;
         this.date = date;
     }
 
-    public Game(Integer id, String name, Float chance, Date date) {
+    public Game(Integer id, String name, float chance, Date date) {
         this.id = id;
         this.name = name;
         this.chance = chance;
@@ -46,11 +46,11 @@ public class Game implements Serializable, Comparable<Game> {
         this.id = id;
     }
 
-    public Float getChance() {
+    public float getChance() {
         return chance;
     }
 
-    public void setChance(Float chance) {
+    public void setChance(float chance) {
         this.chance = chance;
     }
 
