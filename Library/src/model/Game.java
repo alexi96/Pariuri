@@ -45,14 +45,4 @@ public class Game implements Serializable, Comparable<Game> {
         this.chance = chance;
     }
 
-    @Override
-    public int compareTo(Game g) {
-        return this.name.compareTo(g.name);
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
-
 }
