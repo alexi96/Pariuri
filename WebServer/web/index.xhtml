@@ -9,19 +9,16 @@
     </h:head>
     <h:body>
         <h:form id="upd">
-            <c:choose >
+            <c:choose>
                 <c:when test="#{user.id == null}">
                     <h:form>
                         <p:growl id="msgs" showDetail="true" />
-                        <p>
-                            Username:
-                            <p:inputText value="#{user.username}"/>
-                        </p>
-                        <p>
-                            Password:
-                            <p:inputText value="#{user.password}"/>            
-                        </p>
-                        <p:commandButton value="Log" actionListener="#{user.log}" update="upd msgs"/>
+                            <div class="container">
+                                <label><b>Username</b></label>
+                                <input type="text" placeholder="Enter Username" name="uname" required="true">
+                                <label><b>Password</b></label>
+                                <input type="password" placeholder="Enter Password" name="psw" required="true">
+                            </div>
                     </h:form>
                 </c:when>
                 <c:otherwise>
