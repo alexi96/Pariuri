@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Country implements Serializable, Comparable<Country> {
 
-    protected String name;
     protected Integer id;
+    protected String name;
 
     public Country() {
     }
