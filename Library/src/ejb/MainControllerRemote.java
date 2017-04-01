@@ -12,6 +12,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import model.Country;
+import model.Team;
 import model.User;
 
 /**
@@ -39,12 +41,21 @@ public interface MainControllerRemote {
                 if (Modifier.isStatic(tf.getModifiers())) {
                     continue;
                 }
-                
+
                 try {
                     Field ff = fc.getDeclaredField(tf.getName());
+
                     ff.setAccessible(true);
                     tf.setAccessible(true);
-                    tf.set(to, ff.get(fo));
+
+                    if (ff.getType().equals(tf.getType())) {
+                        tf.set(to, ff.get(fo));
+                    } else {
+                        Object t = MainControllerRemote.model(ff.get(fo), tf.getType());
+                        if (t != null) {
+                            tf.set(to, t);
+                        }
+                    }
                 } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
                 }
             }

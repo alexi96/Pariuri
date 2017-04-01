@@ -14,9 +14,9 @@ public class Country implements Serializable, Comparable<Country> {
         this.id = id;
     }
 
-    public Country(String name, Integer id) {
-        this.name = name;
+    public Country(Integer id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public Integer getId() {

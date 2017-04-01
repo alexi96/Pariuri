@@ -5,9 +5,12 @@
  */
 package ejb;
 
+import db.TeamDB;
 import db.UserDB;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import model.Country;
+import model.Team;
 import model.User;
 
 /**

@@ -6,12 +6,13 @@ public class Team implements Serializable, Comparable<Team> {
 
     protected Integer id;
     protected String name;
-    
+    protected Country country;
+
     public Team() {
-        
+
     }
 
-    public Team(Integer id, String name, Integer country) {
+    public Team(Integer id, String name, Country country) {
         this.id = id;
         this.name = name;
         this.country = country;
@@ -33,15 +34,14 @@ public class Team implements Serializable, Comparable<Team> {
         this.name = name;
     }
 
-    public Integer getCountry() {
+    public Country getCountry() {
         return country;
     }
 
-    public void setCountry(Integer country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
-    protected Integer country;
-    
+
     @Override
     public int compareTo(Team o) {
         return this.name.compareTo(o.name);
