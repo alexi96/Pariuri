@@ -18,7 +18,7 @@
                             <p:inputText id="username" value="#{user.username}" placeholder="Enter Username" required="true"/>
                             <label><b>Password</b></label>
                             <p:password value="#{user.password}" placeholder="Enter Password" required="true"/>
-                            <p:commandButton type="submit">Login</button>
+                            <p:commandButton value="Login" actionListener="#{user.log}"/>
                             <input type="checkbox" checked="checked"> Remember me</input>
                             <div class="container" style="background-color:#f1f1f1">
                                 <p:commandButton type="button" class="cancelbtn">Cancel</button>
