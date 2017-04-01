@@ -5,8 +5,26 @@ import java.io.Serializable;
 public class Country implements Serializable, Comparable<Country> {
 
     protected String name;
+    protected Integer id;
 
     public Country() {
+    }
+
+    public Country(Integer id) {
+        this.id = id;
+    }
+
+    public Country(String name, Integer id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
