@@ -1,21 +1,23 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Game implements Serializable, Comparable<Game> {
 
-    protected String name;
     protected Integer id;
+    protected String name;
     protected Float chance;
-    
+    protected Date date;
+
     public Game() {
-        
+
     }
-    
+
     public Game(Integer id) {
         this.id = id;
     }
-    
+
     public Game(String name, Float chance) {
         this.name = name;
         this.chance = chance;
@@ -45,4 +47,13 @@ public class Game implements Serializable, Comparable<Game> {
         this.chance = chance;
     }
 
+    @Override
+    public int compareTo(Game o) {
+        return this.date.compareTo(o.date);
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }
