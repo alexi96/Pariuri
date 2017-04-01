@@ -7,15 +7,15 @@ public class Game implements Serializable, Comparable<Game> {
     protected String name;
     protected Integer id;
     protected Float chance;
-    
+
     public Game() {
-        
+
     }
-    
+
     public Game(Integer id) {
         this.id = id;
     }
-    
+
     public Game(String name, Float chance) {
         this.name = name;
         this.chance = chance;
@@ -43,6 +43,16 @@ public class Game implements Serializable, Comparable<Game> {
 
     public void setChance(Float chance) {
         this.chance = chance;
+    }
+
+    @Override
+    public int compareTo(Game g) {
+        return this.name.compareTo(g.name);
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 
 }
