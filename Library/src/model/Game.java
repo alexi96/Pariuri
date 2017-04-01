@@ -6,7 +6,6 @@ import java.util.Date;
 public class Game implements Serializable, Comparable<Game> {
 
     protected Integer id;
-
     protected String name;
     protected float chance;
     protected Date date;
