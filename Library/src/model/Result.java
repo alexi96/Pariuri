@@ -56,7 +56,8 @@ public class Result implements Serializable, Comparable<Result> {
         Float tv = this.value;
         Float ov = o.value;
         return tv.compareTo(ov);
-    }
+    }  
+    
 
     @Override
     public String toString() {
