@@ -66,9 +66,6 @@ $RECYCLE.BIN/
 /Library/dist/
 /WebClient/dist/
 /Server/dist/
-/Library/nbproject/
-/WebClient/nbproject/
-/Server/nbproject/
-*.properties
-/WebServer/build/
+/Library/nbproject/private
+/Server/nbproject/private
 /WebServer/nbproject/private/
