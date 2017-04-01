@@ -44,7 +44,7 @@ public class Team implements Serializable, Comparable<Team> {
     
     @Override
     public int compareTo(Team o) {
-        return this.date.compareTo(o.name);
+        return this.name.compareTo(o.name);
     }
 
     @Override
