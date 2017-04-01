@@ -12,6 +12,7 @@
             <c:choose >
                 <c:when test="#{user.id == null}">
                     <h:form>
+                        <p:growl id="msgs" showDetail="true" />
                         <p>
                             Username:
                             <p:inputText value="#{user.username}"/>
@@ -20,7 +21,7 @@
                             Password:
                             <p:inputText value="#{user.password}"/>            
                         </p>
-                        <p:commandButton value="Log" actionListener="#{user.log}" update="upd"/>
+                        <p:commandButton value="Log" actionListener="#{user.log}" update="upd msgs"/>
                     </h:form>
                 </c:when>
                 <c:otherwise>
