@@ -2,21 +2,23 @@ package model;
 
 import java.io.Serializable;
 
-public class Result implements Serializable, Comparable<Result> {
+public class Ticket implements Serializable, Comparable<Ticket> {
 
     protected Integer id;
     protected float value;
-    protected Integer game;
+    protected Integer operation;
+    protected Integer composed_ticket;
     protected Integer type;
 
-    public Result() {
+    public Ticket() {
 
     }
 
-    public Result(Integer id, float value, Integer game, Integer type) {
+    public Ticket(Integer id, float value, Integer operation, Integer composed_ticket, Integer type) {
         this.id = id;
         this.value = value;
-        this.game = game;
+        this.operation = operation;
+        this.composed_ticket = composed_ticket;
         this.type = type;
     }
 
@@ -36,12 +38,20 @@ public class Result implements Serializable, Comparable<Result> {
         this.value = value;
     }
 
-    public Integer getGame() {
-        return game;
+    public Integer getOperation() {
+        return operation;
     }
 
-    public void setGame(Integer game) {
-        this.game = game;
+    public void setOperation(Integer operation) {
+        this.operation = operation;
+    }
+
+    public Integer getComposed_ticket() {
+        return composed_ticket;
+    }
+
+    public void setComposed_ticket(Integer composed_ticket) {
+        this.composed_ticket = composed_ticket;
     }
 
     public Integer getType() {
@@ -53,7 +63,7 @@ public class Result implements Serializable, Comparable<Result> {
     }
 
     @Override
-    public int compareTo(Result o) {
+    public int compareTo(Ticket o) {
         return this.value.compareTo(o.value);
     }
 
