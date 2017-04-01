@@ -11,16 +11,23 @@ public class Game implements Serializable, Comparable<Game> {
     protected Date date;
 
     public Game() {
-
     }
 
     public Game(Integer id) {
         this.id = id;
     }
 
-    public Game(String name, Float chance) {
+    public Game(String name, Float chance, Date date) {
         this.name = name;
         this.chance = chance;
+        this.date = date;
+    }
+
+    public Game(Integer id, String name, Float chance, Date date) {
+        this.id = id;
+        this.name = name;
+        this.chance = chance;
+        this.date = date;
     }
 
     public String getName() {
