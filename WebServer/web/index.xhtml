@@ -13,12 +13,12 @@
                 <c:when test="#{user.id == null}">
                     <h:form>
                         <p:growl id="msgs" showDetail="true" />
-                            <div class="container">
-                                <label><b>Username</b></label>
-                                <input type="text" placeholder="Enter Username" name="uname" required="true">
-                                <label><b>Password</b></label>
-                                <input type="password" placeholder="Enter Password" name="psw" required="true">
-                            </div>
+                        <div class="container">
+                            <label><b>Username</b></label>
+                            <p:inputText value="#{user.username}" placeholder="Enter Username" required="true"/>
+                            <label><b>Password</b></label>
+                            <p:password value="#{user.password}" placeholder="Enter Password" required="true"/>
+                        </div>
                     </h:form>
                 </c:when>
                 <c:otherwise>

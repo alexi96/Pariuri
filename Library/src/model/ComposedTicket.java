@@ -2,12 +2,12 @@ package model;
 
 import java.io.Serializable;
 
-public class ComposedTicket implements Serializable, Comparable<ComposedTicket>{
-    
+public class ComposedTicket implements Serializable, Comparable<ComposedTicket> {
+
     protected Integer id;
     protected Integer game;
     protected Integer user;
-    
+
     public ComposedTicket() {
     }
 
@@ -40,6 +40,7 @@ public class ComposedTicket implements Serializable, Comparable<ComposedTicket>{
     public void setUser(Integer user) {
         this.user = user;
     }
+
     @Override
     public int compareTo(ComposedTicket o) {
         return this.id.compareTo(o.id);
