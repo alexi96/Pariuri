@@ -1,4 +1,6 @@
 *.class
+*/nbproject/private.properties
+*/nbproject/private.xml
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -61,3 +63,12 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Library/dist/
+/WebClient/dist/
+/Server/dist/
+/Library/nbproject/
+/WebClient/nbproject/
+/Server/nbproject/
+*.properties
+/WebServer/build/
+/WebServer/nbproject/private/
