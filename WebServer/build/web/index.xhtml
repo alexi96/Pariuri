@@ -5,30 +5,28 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
-        <link href="style.css" rel="stylesheet" type="text/css"/>
+        <h:outputStylesheet name="style.css"/>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
         <h:form id="upd">
             <c:choose>
                 <c:when test="#{user.id == null}">
-                    <h:form>
-                        <p:growl id="msgs" showDetail="true" />
-                        <div class="imgcontainer">
-                            <p:graphicImage value="csgobet.png" class="imagine"/>
+                    <p:growl id="msgs" showDetail="true" />
+                    <div class="imgcontainer">
+                        <p:graphicImage value="csgobet.png" class="imagine imgcontainer"/>
+                    </div>
+                    <div class="container">
+                        <p:outputLabel for="username" value="Username"/>
+                        <p:inputText id="username" value="#{user.username}" placeholder="Enter Username" required="true"/>
+                        <p:outputLabel for="password" value="Password"/>
+                        <p:password id="password" value="#{user.password}" placeholder="Enter Password" required="true"/>
+                        <p:commandButton value="Login" actionListener="#{user.log}" class="buton"/>
+                        <div class="container" style="background-color:#f1f1f1">
+                            <p:commandButton value="Cancel" class="cancelbtn"/>
+                            <span class="psw">Forgot <p:commandLink value="password"/></span>
                         </div>
-                        <div class="container">
-                            <p:outputLabel for="username" value="Username"/>
-                            <p:inputText id="username" value="#{user.username}" placeholder="Enter Username" required="true"/>
-                            <p:outputLabel for="password" value="Password"/>
-                            <p:password id="password" value="#{user.password}" placeholder="Enter Password" required="true"/>
-                            <p:commandButton value="Login" actionListener="#{user.log}" class="buton"/>
-                            <div class="container" style="background-color:#f1f1f1">
-                                <p:commandButton value="Cancel" class="cancelbtn"/>
-                                <span class="psw">Forgot <p:commandLink value="password"/></span>
-                            </div>
-                        </div>
-                    </h:form>
+                    </div>
                 </c:when>
                 <c:otherwise>
                     <p:outputLabel value="#{user.toString()}"/>
