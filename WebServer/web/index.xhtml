@@ -9,30 +9,35 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h:form id="upd">
-            <c:choose>
+        <p:outputPanel id="upd">
+            <c:choose >
                 <c:when test="#{user.id == null}">
-                    <p:growl id="msgs" showDetail="true" />
-                    <div class="imgcontainer">
-                        <p:graphicImage value="csgobet.png" class="imagine imgcontainer"/>
-                    </div>
-                    <div class="container">
-                        <p:outputLabel for="username" value="Username"/>
-                        <p:inputText id="username" value="#{user.username}" placeholder="Enter Username" required="true"/>
-                        <p:outputLabel for="password" value="Password"/>
-                        <p:password id="password" value="#{user.password}" placeholder="Enter Password" required="true"/>
-                        <p:commandButton value="Login" actionListener="#{user.log}" class="buton"/>
-                        <div class="container" style="background-color:#f1f1f1">
-                            <p:commandButton value="Cancel" class="cancelbtn"/>
-                            <span class="psw">Forgot <p:commandLink value="password"/></span>
+                    <h:form id="form">
+                        <div class="imgcontainer">
+                            <p:graphicImage value="csgobet.png" class="imagine imgcontainer"/>
                         </div>
-                    </div>
+                        <div class="container">
+                            <p:growl id="msgs" showDetail="true" />
+                            <p:outputLabel for="username" value="Username"/>
+                            <p:inputText id="username" value="#{user.username}" placeholder="Enter Username" required="true"/>
+                            <p:outputLabel for="password" value="Password"/>
+                            <p:password id="password" value="#{user.password}" placeholder="Enter Password" required="true"/>
+                            <p:commandButton value="Login" actionListener="#{user.log}" class="buton" update="upd"/>
+                            <div class="container" style="background-color:#f1f1f1">
+                                <p:commandButton value="Cancel" class="cancelbtn"/>
+                                <span class="psw">Forgot <p:commandLink value="password"/></span>
+                            </div>
+                        </div>
+                    </h:form>
+                    <h:form>
+                        <p:commandButton value="Create" action="/create.xhtml"/>
+                    </h:form>
                 </c:when>
                 <c:otherwise>
                     <p:outputLabel value="#{user.toString()}"/>
                 </c:otherwise>
             </c:choose>
-        </h:form>
+        </p:outputPanel>
     </h:body>
 </html>
 
