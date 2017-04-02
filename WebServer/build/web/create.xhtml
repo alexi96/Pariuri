@@ -6,19 +6,47 @@
     <h:head>
         <h:outputStylesheet name="createstyle.css"/>
         <title>Create account</title>
+        <!--[if lte IE 6]>
+        <style>#top, #bottom, #left, #right { display: none; }</style>
+        <![endif]-->
+
     </h:head>
     <h:body>
+
+        <div id="left"></div>
+        <div id="right"></div>
+        <div id="top"></div>
+        <div id="bottom"></div>
         <h:form>
-            <p:outputLabel for="username" value="Username"/>
-            <p:inputText id="username" value="#{user.username}"/>
-            <p:outputLabel for="firstName" value="First name"/>
-            <p:inputText id="firstName" value="#{user.firstName}"/>
-            <p:outputLabel for="lastName" value="Last name"/>
-            <p:inputText id="lastName" value="#{user.lastName}"/>
-            <p:outputLabel for="password" value="Password"/>
-            <p:password id="password" value="#{user.password}" feedback="true"/>
-            <p:commandButton value="Create account" actionListener="#{user.create}"/>
-            <p:commandButton value="Cancel" action="index" class="createbtn"/>
+
+            <span>
+                <p:outputLabel for="username" value="Username"/>
+            </span>
+            <span>
+                <p:inputText id="username" value="#{user.username}"/>
+            </span>
+            <span>
+                <p:outputLabel for="firstName" value="First name"/>
+            </span>
+            <span>
+                <p:inputText id="firstName" value="#{user.firstName}"/>
+            </span>
+            <span>
+                <p:outputLabel for="lastName" value="Last name"/>
+            </span>
+            <span> 
+                <p:inputText id="lastName" value="#{user.lastName}"/>
+            </span>
+            <span>
+                <p:outputLabel for="password" value="Password"/>
+            </span>
+            <span>
+                <p:password id="password" value="#{user.password}" feedback="true"/>
+            </span>
+            <span>
+                <p:commandButton value="Create account" actionListener="#{user.create}" class="createbtn"/>
+                <p:commandButton value="Cancel" action="index" class="cancelbtn"/>
+            </span>
         </h:form>
     </h:body>
 </html>
