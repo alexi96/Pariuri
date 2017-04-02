@@ -5,12 +5,9 @@
  */
 package ejb;
 
-import db.TeamDB;
 import db.UserDB;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import model.Country;
-import model.Team;
 import model.User;
 
 /**
@@ -38,8 +35,11 @@ public class MainController implements MainControllerRemote {
         if (t == null) {
             return null;
         }
-        User r = MainControllerRemote.model(t, User.class);
+        if (!t.getPassword().equals(password)) {
+            return null;
+        }
 
+        User r = MainControllerRemote.model(t, User.class);
         return r;
     }
 
