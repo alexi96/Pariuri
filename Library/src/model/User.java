@@ -18,19 +18,21 @@ public class User implements Serializable, Comparable<User> {
         this.id = id;
     }
 
-    public User(String username, String password, String firstName, String lastName) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public User(Integer id, String username, String password, String firstName, String lastName) {
+    public User(Integer id, String username, String password, String firstName, String lastName, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
+    }
+
+    public User(String username, String password, String firstName, String lastName, String email) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
     public Integer getId() {
@@ -73,6 +75,14 @@ public class User implements Serializable, Comparable<User> {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
     @Override
     public int compareTo(User o) {
         return this.username.compareTo(o.username);

@@ -12,6 +12,16 @@ import model.User;
 @SessionScoped
 public class WebUser extends User {
 
+    private String sig;
+
+    public String getSig() {
+        return sig;
+    }
+
+    public void setSig(String sig) {
+        this.sig = sig;
+    }
+
     @EJB
     private MainControllerRemote mainController;
 
@@ -22,12 +32,12 @@ public class WebUser extends User {
         super(id);
     }
 
-    public WebUser(Integer id, String username, String password, String firstName, String lastName) {
-        super(id, username, password, firstName, lastName);
+    public WebUser(Integer id, String username, String password, String firstName, String lastName, String email) {
+        super(id, username, password, firstName, lastName, email);
     }
 
-    public WebUser(String username, String password, String firstName, String lastName) {
-        super(username, password, firstName, lastName);
+    public WebUser(String username, String password, String firstName, String lastName, String email) {
+        super(username, password, firstName, lastName, email);
     }
 
     public void log() {
@@ -46,7 +56,8 @@ public class WebUser extends User {
     }
 
     public void create() {
-        User u = new User(username, password, super.firstName, lastName);
+        User u = new User(username, password, super.firstName, super.lastName, email);
+        System.out.println(sig);
         boolean r = this.mainController.createUser(u);
         if (!r) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "sername already exists!", "Username already exists!"));
