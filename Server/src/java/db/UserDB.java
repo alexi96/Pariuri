@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "UserDB.findByUsername", query = "SELECT u FROM UserDB u WHERE u.username = :username")
     , @NamedQuery(name = "UserDB.findByPassword", query = "SELECT u FROM UserDB u WHERE u.password = :password")
     , @NamedQuery(name = "UserDB.findByFirstName", query = "SELECT u FROM UserDB u WHERE u.firstName = :firstName")
-    , @NamedQuery(name = "UserDB.findByLastName", query = "SELECT u FROM UserDB u WHERE u.lastName = :lastName")})
+    , @NamedQuery(name = "UserDB.findByLastName", query = "SELECT u FROM UserDB u WHERE u.lastName = :lastName")
+    , @NamedQuery(name = "UserDB.findByEmail", query = "SELECT u FROM UserDB u WHERE u.email = :email")})
 public class UserDB implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,6 +66,12 @@ public class UserDB implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "last_name")
     private String lastName;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "email")
+    private String email;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Collection<ComposedTicketDB> composedTicketDBCollection;
 
@@ -75,12 +82,13 @@ public class UserDB implements Serializable {
         this.id = id;
     }
 
-    public UserDB(Integer id, String username, String password, String firstName, String lastName) {
+    public UserDB(Integer id, String username, String password, String firstName, String lastName, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
     }
 
     public Integer getId() {
@@ -121,6 +129,14 @@ public class UserDB implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @XmlTransient

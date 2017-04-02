@@ -39,6 +39,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TeamDB.findByName", query = "SELECT t FROM TeamDB t WHERE t.name = :name")})
 public class TeamDB implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,11 +56,6 @@ public class TeamDB implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "name")
     private String name;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Column(name = "image")
-    private byte[] image;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
     private Collection<PlaysDB> playsDBCollection;
     @JoinColumn(name = "country", referencedColumnName = "id")
@@ -90,13 +91,6 @@ public class TeamDB implements Serializable {
         this.name = name;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
 
     @XmlTransient
     public Collection<PlaysDB> getPlaysDBCollection() {
@@ -138,6 +132,14 @@ public class TeamDB implements Serializable {
     @Override
     public String toString() {
         return "db.TeamDB[ id=" + id + " ]";
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
     
 }

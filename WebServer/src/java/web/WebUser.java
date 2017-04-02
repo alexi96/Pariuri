@@ -32,12 +32,12 @@ public class WebUser extends User {
 
     public void log() {
         User u = this.mainController.log(super.username, super.password);
-        
+
         if (u == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed!", "Worng username or password!"));
             return;
         }
-        
+
         super.id = u.getId();
         super.username = u.getUsername();
         this.password = u.getPassword();
@@ -47,7 +47,10 @@ public class WebUser extends User {
 
     public void create() {
         User u = new User(username, password, super.firstName, lastName);
-        this.mainController.createUser(u);
+        boolean r = this.mainController.createUser(u);
+        if (!r) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "sername already exists!", "Username already exists!"));
+        }
     }
 
     public void edit() {

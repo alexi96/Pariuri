@@ -9,6 +9,7 @@ public class User implements Serializable, Comparable<User> {
     protected String password;
     protected String firstName;
     protected String lastName;
+    protected String email;
 
     public User() {
     }

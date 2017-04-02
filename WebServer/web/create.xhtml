@@ -21,28 +21,34 @@
                 <p:outputLabel for="username" value="Username"/>
             </span>
             <span>
-                <p:inputText id="username" value="#{user.username}"/>
+                <p:inputText id="username" value="#{user.username}" required="true"/>
             </span>
             <span>
                 <p:outputLabel for="firstName" value="First name"/>
             </span>
             <span>
-                <p:inputText id="firstName" value="#{user.firstName}"/>
+                <p:inputText id="firstName" value="#{user.firstName}" required="true"/>
             </span>
             <span>
                 <p:outputLabel for="lastName" value="Last name"/>
             </span>
             <span> 
-                <p:inputText id="lastName" value="#{user.lastName}"/>
+                <p:inputText id="lastName" value="#{user.lastName}" required="true"/>
+            </span>
+            <span>
+                <p:outputLabel for="email" value="Password"/>
+            </span>
+            <span> 
+                <p:inputText id="email" value="#{user.email}" required="true"/>
             </span>
             <span>
                 <p:outputLabel for="password" value="Password"/>
             </span>
             <span>
-                <p:password id="password" value="#{user.password}" feedback="true"/>
+                <p:password id="password" value="#{user.password}" feedback="true" required="true"/>
             </span>
             <span>
-                <p:commandButton value="Create account" actionListener="#{user.create}" class="createbtn"/>
+                <p:commandButton value="Create account" actionListener="#{user.create}" class="createbtn" update="creteForm"/>
                 <p:commandButton value="Cancel" action="index" class="cancelbtn"/>
             </span>
         </h:form>
