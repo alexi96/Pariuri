@@ -8,7 +8,8 @@
         <title>Create account</title>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="creteForm">
+            <p:growl/>
             <p:outputLabel for="username" value="Username"/>
             <p:inputText id="username" value="#{user.username}" required="true"/>
             <p:outputLabel for="firstName" value="First name"/>
@@ -17,7 +18,9 @@
             <p:inputText id="lastName" value="#{user.lastName}" required="true"/>
             <p:outputLabel for="password" value="Password"/>
             <p:password id="password" value="#{user.password}" feedback="true" required="true"/>
-            <p:commandButton value="Create account" actionListener="#{user.create}"/>
+            <p:commandButton value="Create account" actionListener="#{user.create}" update="creteForm"/>
+        </h:form>
+        <h:form>
             <p:commandButton value="Cancel" action="index" class="createbtn"/>
         </h:form>
     </h:body>
