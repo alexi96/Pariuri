@@ -46,7 +46,7 @@ public class WebUser extends User {
     }
 
     public void create() {
-        User u = new User(username, password, "nimic", "cimic");
+        User u = new User(username, password, super.firstName, lastName);
         this.mainController.createUser(u);
     }
 
