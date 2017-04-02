@@ -10,13 +10,13 @@
     <h:body>
         <h:form>
             <p:outputLabel for="username" value="Username"/>
-            <p:inputText id="username" value="#{user.username}"/>
+            <p:inputText id="username" value="#{user.username}" required="true"/>
             <p:outputLabel for="firstName" value="First name"/>
-            <p:inputText id="firstName" value="#{user.firstName}"/>
+            <p:inputText id="firstName" value="#{user.firstName}" required="true"/>
             <p:outputLabel for="lastName" value="Last name"/>
-            <p:inputText id="lastName" value="#{user.lastName}"/>
+            <p:inputText id="lastName" value="#{user.lastName}" required="true"/>
             <p:outputLabel for="password" value="Password"/>
-            <p:password id="password" value="#{user.password}" feedback="true"/>
+            <p:password id="password" value="#{user.password}" feedback="true" required="true"/>
             <p:commandButton value="Create account" actionListener="#{user.create}"/>
             <p:commandButton value="Cancel" action="index" class="createbtn"/>
         </h:form>
