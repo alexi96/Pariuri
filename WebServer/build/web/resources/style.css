@@ -1,5 +1,6 @@
 #form {
     border: 10px solid orange;
+    height: 100%;
 }
 
 input[type=text], input[type=password] {
@@ -47,6 +48,7 @@ span.psw {
 }
 
 .imgcontainer {
+    height: 50%;
     text-align: center;
     margin: 24px 0 12px 0;
 }
@@ -55,7 +57,6 @@ img.imagine {
     width: 27%;
     border-radius: 30%;
 }
-
 
 @media screen and (max-width: 300px) {
     span.psw {
@@ -66,4 +67,3 @@ img.imagine {
         width: 100%;
     }
 }
-

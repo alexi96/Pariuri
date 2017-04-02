@@ -13,10 +13,10 @@
             <c:choose >
                 <c:when test="#{user.id == null}">
                     <div id="form">
+                        <div class="imgcontainer">
+                            <p:graphicImage value="csgobet.png" class="imagine "/>
+                        </div>
                         <h:form>
-                            <div class="imgcontainer">
-                                <p:graphicImage value="csgobet.png" class="imagine imgcontainer"/>
-                            </div>
                             <div class="container">
                                 <p:growl id="msgs" showDetail="true" />
                                 <p:outputLabel for="username" value="Username"/>
@@ -27,14 +27,12 @@
 
                             </div>
                         </h:form>
-                        <div class="container" style="background-color:#f1f1f1">
-                            <h:form>
-                                <p:commandButton value="Create" action="create" class="createbtn"/>
+                        <h:form class="container" style="background-color:#f1f1f1">
+                            <p:commandButton value="Create" action="create" class="createbtn"/>
 
-                                <p:commandButton value="Cancel" class="cancelbtn"/>
-                                <span class="psw">Forgot <p:commandLink value="password"/></span>
-                            </h:form>
-                        </div>
+                            <p:commandButton value="Cancel" class="cancelbtn"/>
+                            <span class="psw">Forgot <p:commandLink value="password"/></span>
+                        </h:form>
                     </div>
                 </c:when>
                 <c:otherwise>
