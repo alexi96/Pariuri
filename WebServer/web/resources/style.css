@@ -1,6 +1,6 @@
 #form {
     border: 10px solid orange;
-    height: 100%;
+    height: auto;
 }
 
 input[type=text], input[type=password] {
