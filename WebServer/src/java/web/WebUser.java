@@ -55,13 +55,14 @@ public class WebUser extends User {
         super.lastName = u.getLastName();
     }
 
-    public void create() {
+    public String create() {
         User u = new User(username, password, super.firstName, super.lastName, email);
-        System.out.println(sig);
         boolean r = this.mainController.createUser(u);
         if (!r) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "sername already exists!", "Username already exists!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "username already exists!", "Username already exists!"));
+            return "error";
         }
+        return "created";
     }
 
     public void edit() {

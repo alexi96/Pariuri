@@ -64,21 +64,23 @@ public class MainController implements MainControllerRemote {
             return false;
         }
 
-        UserDB udb = MainControllerRemote.model(t, UserDB.class);
+        UserDB udb = MainControllerRemote.model(u, UserDB.class);
         this.userDBFacade.create(udb);
 
+        String to = u.getEmail();
+        String host = "smtp.gmail.com";
         final String username = "betting231@gmail.com";
         final String password = "bettingproiect";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.trust", host);
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", "587");
 
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
-            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
@@ -86,12 +88,14 @@ public class MainController implements MainControllerRemote {
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("from-email@gmail.com"));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(u.getEmail()));
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+
             message.setSubject("CS GO Betting");
-            message.setText("Merge?\n<h1 style=\"color: green\">Titlu verge</h1>");
+            message.setContent("Merge?\n<h1 style=\"color: red\">MERGE BAAAA</h1>", "text/html");
 
             Transport.send(message);
+            System.out.println("sent");
         } catch (MessagingException e) {
             return false;
         }
