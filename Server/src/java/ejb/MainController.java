@@ -67,8 +67,8 @@ public class MainController implements MainControllerRemote {
         UserDB udb = MainControllerRemote.model(t, UserDB.class);
         this.userDBFacade.create(udb);
 
-        final String username = "username@gmail.com";
-        final String password = "password";
+        final String username = "betting231@gmail.com";
+        final String password = "bettingproiect";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -88,8 +88,8 @@ public class MainController implements MainControllerRemote {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("from-email@gmail.com"));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(u.getEmail()));
-            message.setSubject("Testing");
-            message.setText("Merge?");
+            message.setSubject("CS GO Betting");
+            message.setText("Merge?\n<h1 style=\"color: green\">Titlu verge</h1>");
 
             Transport.send(message);
         } catch (MessagingException e) {
