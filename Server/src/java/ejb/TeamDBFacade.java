@@ -6,9 +6,13 @@
 package ejb;
 
 import db.TeamDB;
+import db.UserDB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +31,16 @@ public class TeamDBFacade extends AbstractFacade<TeamDB> {
 
     public TeamDBFacade() {
         super(TeamDB.class);
+    }
+
+    public TeamDB findByName(String name) {
+        Query q = this.em.createNamedQuery("TeamDB.findByName");
+        q.setParameter("name", name);
+        try {
+            return (TeamDB) q.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
+        }
+        return null;
     }
     
 }

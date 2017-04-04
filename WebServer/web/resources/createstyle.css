@@ -12,6 +12,10 @@ span {
     margin: 25px 25px;
 }
 
+label>span {
+    display: inline;
+}
+
 .cancelbtn {
     width: auto;
     padding: 10px 18px;
