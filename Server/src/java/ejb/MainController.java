@@ -7,8 +7,16 @@ import db.StatisticTypeDB;
 import db.TeamDB;
 import db.UserDB;
 import java.util.List;
+import java.util.Properties;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import model.Game;
 import model.Team;
 import model.User;
@@ -58,6 +66,36 @@ public class MainController implements MainControllerRemote {
 
         UserDB udb = MainControllerRemote.model(t, UserDB.class);
         this.userDBFacade.create(udb);
+
+        final String username = "username@gmail.com";
+        final String password = "password";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("from-email@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(u.getEmail()));
+            message.setSubject("Testing");
+            message.setText("Merge?");
+
+            Transport.send(message);
+        } catch (MessagingException e) {
+            return false;
+        }
+
         return true;
     }
 

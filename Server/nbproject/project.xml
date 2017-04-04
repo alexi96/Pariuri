@@ -6,6 +6,7 @@
             <name>Server</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <included-library dirs="200">reference.Library.jar</included-library>
+            <included-library dirs="200">file.reference.javax.mail.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
