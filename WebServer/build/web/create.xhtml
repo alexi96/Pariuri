@@ -21,34 +21,34 @@
                 <p:outputLabel for="username" value="Username"/>
             </span>
             <span>
-                <p:inputText id="username" value="#{user.username}" required="true"/>
+                <p:inputText id="username" value="#{created.username}" required="true"/>
             </span>
             <span>
                 <p:outputLabel for="firstName" value="First name"/>
             </span>
             <span>
-                <p:inputText id="firstName" value="#{user.firstName}" required="true"/>
+                <p:inputText id="firstName" value="#{created.firstName}" required="true"/>
             </span>
             <span>
                 <p:outputLabel for="lastName" value="Last name"/>
             </span>
             <span> 
-                <p:inputText id="lastName" value="#{user.lastName}" required="true"/>
+                <p:inputText id="lastName" value="#{created.lastName}" required="true"/>
             </span>
             <span>
                 <p:outputLabel for="email" value="Email"/>
             </span>
             <span> 
-                <p:inputText id="email" value="#{user.email}" required="true"/>
+                <p:inputText id="email" value="#{created.email}" required="true"/>
             </span>
             <span>
                 <p:outputLabel for="password" value="Password"/>
             </span>
             <span>
-                <p:password id="password" value="#{user.password}" feedback="true" required="true"/>
+                <p:password id="password" value="#{created.password}" feedback="true" required="true"/>
             </span>
             <span>
-                <p:commandButton value="Create account" action="#{user.create}" class="createbtn" update="creteForm"/>
+                <p:commandButton value="Create account" action="#{created.create}" class="createbtn" update="creteForm"/>
             </span>
         </h:form>
         <h:form>           

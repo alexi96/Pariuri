@@ -3,41 +3,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    <h:head>
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head id="tupd">
         <h:outputStylesheet name="style.css"/>
-        <title>Facelet Title</title>
+        <c:choose>
+            <c:when test="#{user.id == null}">
+                <title>Pariuri SC:GO</title>
+            </c:when>
+            <c:otherwise>
+                <title>Pariuri SC:GO #{user.username}</title>
+            </c:otherwise>
+        </c:choose>
     </h:head>
     <h:body>
         <p:outputPanel id="upd">
-            <c:choose >
+            <c:choose>
                 <c:when test="#{user.id == null}">
-                    <div id="form">
-                        <div class="imgcontainer">
-                            <p:graphicImage value="csgobet.png" class="imagine "/>
-                        </div>
-                        <h:form>
-                            <div class="container">
-                                <p:growl id="msgs" showDetail="true" />
-                                <p:outputLabel for="username" value="Username"/>
-                                <p:inputText id="username" value="#{user.username}" placeholder="Enter Username" required="true"/>
-                                <p:outputLabel for="password" value="Password"/>
-                                <p:password id="password" value="#{user.password}" placeholder="Enter Password" required="true"/>
-                                <p:commandButton value="Login" actionListener="#{user.log}" class="buton" update="upd"/>
-                            </div>
-                        </h:form>
-                        <h:form class="container" style="background-color:#f1f1f1">
-                            <p:commandButton value="Create" action="create" class="createbtn"/>
-                            <p:commandButton value="Cancel" class="cancelbtn"/>
-                            <span class="psw">Forgot <p:commandLink value="password"/></span>
-                        </h:form>
-                    </div>
+                    <ui:insert>
+                        <ui:include src="log.xhtml"/>
+                    </ui:insert>
                 </c:when>
                 <c:otherwise>
-                    <p:outputLabel value="#{user.toString()}"/>
+                    <ui:insert>
+                        <ui:include src="home.xhtml"/>
+                    </ui:insert>
                 </c:otherwise>
             </c:choose>
         </p:outputPanel>
+        <h:form>
+            <p:commandButton value="Test" action="created" actionListener="#{created.log('admin', 'pass')}"/>
+        </h:form>
     </h:body>
 </html>
 

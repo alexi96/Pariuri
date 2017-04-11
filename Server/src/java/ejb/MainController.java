@@ -6,10 +6,13 @@ import db.ResultDB;
 import db.StatisticTypeDB;
 import db.TeamDB;
 import db.UserDB;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -79,8 +82,8 @@ public class MainController implements MainControllerRemote {
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", "587");
 
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }

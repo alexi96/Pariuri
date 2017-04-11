@@ -41,7 +41,11 @@ public class WebUser extends User {
     }
 
     public void log() {
-        User u = this.mainController.log(super.username, super.password);
+        this.log(this.username, this.password);
+    }
+    
+    public void log(String user, String pass) {
+        User u = this.mainController.log(user, pass);
 
         if (u == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed!", "Worng username or password!"));
@@ -53,6 +57,7 @@ public class WebUser extends User {
         this.password = u.getPassword();
         super.firstName = u.getFirstName();
         super.lastName = u.getLastName();
+        this.email = u.getEmail();
     }
 
     public String create() {
