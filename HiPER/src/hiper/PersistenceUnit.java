@@ -1,6 +1,5 @@
 package hiper;
 
-import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -9,13 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import test.StatisticTypeDB;
-import test.UserDB;
 
 public class PersistenceUnit {
 
@@ -26,12 +22,20 @@ public class PersistenceUnit {
     public PersistenceUnit() {
     }
 
-    public void connect(String url) throws SQLException {
+    public PersistenceUnit(String url) throws SQLException {
+        this.connect(url);
+    }
+
+    public PersistenceUnit(String url, String user, String pass) throws SQLException {
+        this.connect(url, user, pass);
+    }
+
+    public final void connect(String url) throws SQLException {
         this.connection = DriverManager.getConnection(url);
         this.statement = this.connection.createStatement();
     }
 
-    public void connect(String url, String user, String pass) throws SQLException {
+    public final void connect(String url, String user, String pass) throws SQLException {
         this.connection = DriverManager.getConnection(url, user, pass);
         this.statement = this.connection.createStatement();
     }
@@ -166,22 +170,5 @@ public class PersistenceUnit {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        PersistenceUnit pu = new PersistenceUnit();
-        pu.connect("jdbc:mysql://localhost:3306/pariuri", "root", "");
-        pu.register(StatisticTypeDB.class);
-        pu.register(UserDB.class);
-
-        List<StatisticTypeDB> all = pu.select(StatisticTypeDB.class);
-        System.out.println(all);
-
-        QueryBy q = new QueryBy(UserDB.class, "firstName", "password");
-        q.parameters("Radu", "pass");
-        List<UserDB> users = pu.select(q);
-        System.out.println(users);
-
-        System.out.println(pu.select(UserDB.class, 17));
     }
 }

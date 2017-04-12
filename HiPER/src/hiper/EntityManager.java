@@ -1,7 +1,6 @@
 package hiper;
 
 import hiper.anotations.HiperField;
-import test.StatisticTypeDB;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -92,15 +91,17 @@ public class EntityManager<E> {
     }
 
     protected String createQl(E bean) throws IllegalArgumentException, IllegalAccessException {
-        StringBuilder ql = new StringBuilder("insert into `" + this.tableName + "` (");
+        StringBuilder ql = new StringBuilder("insert into `");
+        ql.append(tableName);
+        ql.append("` (");
 
         Collection<Field> fs = new ArrayList<>(this.fields.keySet());
         fs.removeAll(this.keys);
-        for (Field f : fs) {
+        fs.forEach((f) -> {
             ql.append("`");
             ql.append(this.fields.get(f));
             ql.append("`,");
-        }
+        });
         if (!fs.isEmpty()) {
             ql.deleteCharAt(ql.length() - 1);
         }
@@ -190,11 +191,11 @@ public class EntityManager<E> {
             ql.append("`");
             ql.append(this.fields.get(k));
             ql.append("`=");
-            
+
             ToQl bds = EntityManager.TO_QLS.get(k.getType());//Not in this context
             ql.append(bds.value(ids[index]));
             ql.append(" and ");
-            
+
             ++index;
         }
         ql.delete(ql.length() - 5, ql.length());
@@ -211,7 +212,7 @@ public class EntityManager<E> {
 
         ql.append(" where ");
         Set<String> fss = q.values.keySet();
-        for (String fstr : fss) {
+        fss.forEach(fstr -> {
             Field f = this.fields.keySet().stream()
                     .filter((fld) -> fld.getName().equals(fstr))
                     .findFirst()
@@ -221,10 +222,10 @@ public class EntityManager<E> {
             ql.append(this.fields.get(f));
             ql.append("`=");
 
-            ToQl bds = EntityManager.TO_QLS.get(f.getType());//Not in this context
+            ToQl bds = EntityManager.TO_QLS.get(f.getType());
             ql.append(bds.value(q.values.get(fstr)));
             ql.append(" and ");
-        }
+        });
         ql.delete(ql.length() - 5, ql.length());
 
         return ql.toString();
