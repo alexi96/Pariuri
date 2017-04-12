@@ -134,12 +134,37 @@ public class BetServer implements Connection {
 
     @Override
     public boolean createGame(Game g, Team a, Team b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PlaysDB pa = new PlaysDB();
+        PlaysDB pb = new PlaysDB();
+
+        TeamDB ta = BetServer.model(a, TeamDB.class);
+        TeamDB tb = BetServer.model(b, TeamDB.class);
+        GameDB t = BetServer.model(g, GameDB.class);
+
+        pa.setGame(t);
+        pb.setGame(t);
+        pa.setTeam(ta);
+        pb.setTeam(tb);
+
+        this.pu.create(pa);
+        this.pu.create(pb);
+        return true;
     }
 
     @Override
     public void createScore(Game g, float... statistics) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        GameDB gdb = BetServer.model(g, GameDB.class);
+
+        List<StatisticTypeDB> all = this.pu.select(StatisticTypeDB.class);
+        int index = 0;
+        for (StatisticTypeDB s : all) {
+            ResultDB r = new ResultDB(null, st[index]);
+            r.setGame(gdb);
+            r.setType(s);
+            this.pu.create(r);
+
+            ++index;
+        }
     }
 
     public static <T, F> T model(F fo, Class<T> tc) {
