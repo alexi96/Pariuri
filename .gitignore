@@ -73,3 +73,5 @@ $RECYCLE.BIN/
 /HiPER/nbproject/private/
 /HiPER/build/
 /HiRPC/build/
+/HiRPC/dist/
+/WebServer/build/

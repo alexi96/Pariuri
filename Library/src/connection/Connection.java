@@ -7,6 +7,8 @@ import model.User;
 public interface Connection {
 
     int PORT = 3728;
+    
+    String test(String t);
 
     User log(String username, String password);
 

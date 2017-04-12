@@ -42,6 +42,11 @@ public class BetServer implements Connection {
     }
 
     @Override
+    public String test(String t) {
+        return "Response: " + t;
+    }
+
+    @Override
     public User log(String username, String password) {
         try {
             QueryBy<UserDB> byUsername = new QueryBy<>(UserDB.class);
