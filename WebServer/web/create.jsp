@@ -27,30 +27,30 @@
                 <input id="firstName" type="text" name="firstName" required="true"/>
             </span>
             <span>
-                <p:outputLabel for="lastName" value="Last name"/>
+                Last name
             </span>
             <span> 
-                <p:inputText id="lastName" value="#{created.lastName}" required="true"/>
+                <input id="lastName" type="text" name="lastName" required="true"/>
             </span>
             <span>
-                <p:outputLabel for="email" value="Email"/>
+                Email
             </span>
             <span> 
-                <p:inputText id="email" value="#{created.email}" required="true"/>
+                <input id="email" type="text" name="email" required="true"/>
             </span>
             <span>
-                <p:outputLabel for="password" value="Password"/>
+                Password
+            </span>
+            <span>                
+                <input id="password" type="text" name="password" required="true"/>
             </span>
             <span>
-                <p:password id="password" value="#{created.password}" feedback="true" required="true"/>
-            </span>
-            <span>
-                <p:commandButton value="Create account" action="#{created.create}" class="createbtn" update="creteForm"/>
+                <input type="submit" class="createbtn" value="Create"/>
             </span>
         </form>
     <h:form>           
         <span>
-            <p:commandButton value="Cancel" action="index" class="cancelbtn"/>
+            <input type="submit" value="Cancel" class="cancelbtn"/>
         </span>
     </h:form>
 </body>
