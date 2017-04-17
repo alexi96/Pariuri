@@ -1,21 +1,12 @@
 package web;
 
 import connection.Connection;
+import controllers.MainController;
 import model.User;
 
 public class WebUser extends User {
 
-    private String sig;
-
-    public String getSig() {
-        return sig;
-    }
-
-    public void setSig(String sig) {
-        this.sig = sig;
-    }
-
-    private Connection mainController;
+    private final Connection mainController = MainController.getInstance().getConnection();
 
     public WebUser() {
     }
@@ -35,7 +26,7 @@ public class WebUser extends User {
     public void log() {
         this.log(this.username, this.password);
     }
-    
+
     public void log(String user, String pass) {
         User u = this.mainController.log(user, pass);
 

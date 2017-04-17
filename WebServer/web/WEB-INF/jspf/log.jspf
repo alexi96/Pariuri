@@ -2,7 +2,7 @@
     <div class="imgcontainer">
         <img src="resources/csgobet.png" class="imagine "/>
     </div>
-    <form method="post" >
+    <form action="log" method="post" >
         <div class="container">
             Username: <input type="text" name="username"/>
             Password: <input type="password" name="password"/>
