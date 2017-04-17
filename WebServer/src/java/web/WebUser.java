@@ -6,7 +6,7 @@ import model.User;
 
 public class WebUser extends User {
 
-    private final Connection mainController = MainController.getInstance().getConnection();
+    private final Connection mainController=null;// = MainController.getInstance().getConnection();
 
     public WebUser() {
     }

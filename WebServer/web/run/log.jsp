@@ -1,6 +1,7 @@
-<jsp:useBean id="user" class="web.WebUser" scope="session" >
-    <jsp:setProperty name="user" property="*" />
-</jsp:useBean>
+<jsp:setProperty name="user" property="*" />
+<jsp:directive.page import="web.WebUser" />
 <%
-    user.log();
+    WebUser user = (WebUser) request.getSession().getAttribute("user");
+    user.setId(9);
 %>
+<jsp:forward page="/index.jsp" />

@@ -2,10 +2,10 @@
     <div class="imgcontainer">
         <img src="resources/csgobet.png" class="imagine "/>
     </div>
-    <form action="log" method="post" >
+    <form action="run/log.jsp" method="post" >
         <div class="container">
-            Username: <input type="text" name="username"/>
-            Password: <input type="password" name="password"/>
+            Username: <input type="text" name="username" required />
+            Password: <input type="password" name="password" required />
             <input type="submit" value="Login"/>
         </div>
     </form>

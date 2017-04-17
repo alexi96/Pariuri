@@ -22,26 +22,10 @@
         <div id="upd">
             <c:choose>
                 <c:when test="${user.id == null}">
-                    <div id="form">
-                        <div class="imgcontainer">
-                            <img src="resources/csgobet.png" class="imagine "/>
-                        </div>
-                        <form action="run/log.jsp" method="post" >
-                            <div class="container">
-                                Username: <input type="text" name="username" required/>
-                                Password: <input type="password" name="password" required/>
-                                <input type="submit" value="Login"/>
-                            </div>
-                        </form>
-                        <form action="create.jsp" class="container" style="background-color:#f1f1f1">
-                            <input type="submit" value="Create"/>
-                            <input type="submit" value="Cancel"/>
-                            <span class="psw">Forgot <a>password</a></span>
-                        </form>
-                    </div>
+                    <jsp:include page="WEB-INF/jspf/log.jspf" />
                 </c:when>
                 <c:otherwise>
-                    <h1>Welcome <jsp:getProperty name="user" property="username"/></h1>
+                    <h1>Welcome <jsp:getProperty name="user" property="username"/><jsp:getProperty name="user" property="id"/></h1>
                 </c:otherwise>
             </c:choose>
         </div>
