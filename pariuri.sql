@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2017 at 07:36 PM
+-- Generation Time: Apr 18, 2017 at 03:49 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.23
 
@@ -35,6 +35,12 @@ ALTER TABLE `ticket` ADD CONSTRAINT fk_ticket2 FOREIGN KEY (`type`) REFERENCES `
 ALTER TABLE `team` ADD CONSTRAINT fk_team1 FOREIGN KEY (`country`) REFERENCES `country`(`id`);
 ALTER TABLE `plays` ADD CONSTRAINT fk_plays1 FOREIGN KEY (`team`) REFERENCES `team`(`id`);
 ALTER TABLE `plays` ADD CONSTRAINT fk_plays2 FOREIGN KEY (`game`) REFERENCES `game`(`id`);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createStatisticTypes` ()  NO SQL
+BEGIN
+DELETE FROM `statistic_type`;
+ALTER TABLE `statistic_type` AUTO_INCREMENT = 1;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeKeys` ()  NO SQL
@@ -81,7 +87,9 @@ CREATE TABLE `country` (
 CREATE TABLE `game` (
   `id` int(11) NOT NULL,
   `name` varchar(512) NOT NULL,
-  `chance` float NOT NULL
+  `chance` float NOT NULL,
+  `date` datetime NOT NULL,
+  `descripion` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -167,7 +175,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `email`) VALUES
-(1, 'a', 'b', 'nimic', 'cimic', '');
+(15, 'alexi96', 'pass', 'Radu', 'Ioan-Alexandru', 'alex_i96@yahoo.com'),
+(16, 'admin', 'pass', 'Radu', 'Ioan-Alexandru', 'alex_i96@yahoo.com'),
+(17, 'delgado2009', '123456', 'Alin', 'Ivascu', 'catal.warrior2@gmail.com');
 
 --
 -- Indexes for dumped tables
@@ -284,7 +294,7 @@ ALTER TABLE `ticket`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- Constraints for dumped tables
 --
