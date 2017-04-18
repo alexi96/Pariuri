@@ -9,6 +9,7 @@ public class Game implements Serializable, Comparable<Game> {
     protected String name;
     protected float chance;
     protected Date date;
+    protected String description;
 
     public Game() {
     }
@@ -17,17 +18,19 @@ public class Game implements Serializable, Comparable<Game> {
         this.id = id;
     }
 
-    public Game(String name, float chance, Date date) {
-        this.name = name;
-        this.chance = chance;
-        this.date = date;
-    }
-
-    public Game(Integer id, String name, float chance, Date date) {
+    public Game(Integer id, String name, float chance, Date date, String description) {
         this.id = id;
         this.name = name;
         this.chance = chance;
         this.date = date;
+        this.description = description;
+    }
+
+    public Game(String name, float chance, Date date, String description) {
+        this.name = name;
+        this.chance = chance;
+        this.date = date;
+        this.description = description;
     }
 
     public String getName() {
@@ -52,6 +55,22 @@ public class Game implements Serializable, Comparable<Game> {
 
     public void setChance(float chance) {
         this.chance = chance;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

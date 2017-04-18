@@ -4,6 +4,9 @@ import connection.Connection;
 import db.StatisticTypeDB;
 import db.UserDB;
 import db.TeamDB;
+import db.GameDB;
+import db.ResultDB;
+import db.PlaysDB;
 import hiper.PersistenceUnit;
 import hiper.QueryBy;
 import java.lang.reflect.Constructor;
@@ -158,17 +161,21 @@ public class BetServer implements Connection {
 
     @Override
     public void createScore(Game g, float... statistics) {
-        GameDB gdb = BetServer.model(g, GameDB.class);
-
-        List<StatisticTypeDB> all = this.pu.select(StatisticTypeDB.class);
-        int index = 0;
-        for (StatisticTypeDB s : all) {
-            ResultDB r = new ResultDB(null, st[index]);
-            r.setGame(gdb);
-            r.setType(s);
-            this.pu.create(r);
-
-            ++index;
+        try {
+            GameDB gdb = BetServer.model(g, GameDB.class);
+            
+            List<StatisticTypeDB> all = this.pu.select(StatisticTypeDB.class);
+            int index = 0;
+            for (StatisticTypeDB s : all) {
+                ResultDB r = new ResultDB(null, statistics[index]);
+                r.setGame(gdb);
+                r.setType(s);
+                this.pu.create(r);
+                
+                ++index;
+            }
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
