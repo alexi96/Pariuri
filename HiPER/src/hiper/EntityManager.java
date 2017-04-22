@@ -8,8 +8,10 @@ import hiper.anotations.HiperEntity;
 import hiper.anotations.HiperPrimaryKey;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
 
 public class EntityManager<E> {
@@ -25,7 +27,10 @@ public class EntityManager<E> {
         EntityManager.TO_QLS.put(Short.class, simple);
         EntityManager.TO_QLS.put(Byte.class, simple);
         EntityManager.TO_QLS.put(Float.class, simple);
+        EntityManager.TO_QLS.put(float.class, simple);
         EntityManager.TO_QLS.put(Double.class, simple);
+        final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        EntityManager.TO_QLS.put(Date.class, (v) -> "'" + sdf.format(v) + "'");
 
         EntityManager.FROM_QLS.put(String.class, (r, f) -> r.getString(f));
         EntityManager.FROM_QLS.put(Long.class, (r, f) -> r.getLong(f));

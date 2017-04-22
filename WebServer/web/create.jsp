@@ -2,9 +2,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <jsp:useBean id="created" scope="page" class="web.WebUser" >
-            <jsp:setProperty name="created" property="*" />
-        </jsp:useBean>
+        <jsp:useBean id="created" scope="page" class="web.WebUser" />
+        <jsp:setProperty name="created" property="*" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="resources/createstyle.css" rel="stylesheet" type="text/css"/>
         <title>Create account</title>
@@ -14,7 +13,7 @@
         <div id="right"></div>
         <div id="top"></div>
         <div id="bottom"></div>
-        <form id="creteForm" action="created.jsp" method="post">
+        <form id="creteForm" action="${pageContext.request.contextPath}/run/create.jsp" method="post">
             <span>
                 Username
             </span>
@@ -49,10 +48,10 @@
                 <input type="submit" class="createbtn" value="Create"/>
             </span>
         </form>
-    <h:form>
+        <form action="index.jsp" method="post" >
         <span>
             <input type="submit" value="Cancel" class="cancelbtn"/>
         </span>
-    </h:form>
+    </form>
 </body>
 </html>

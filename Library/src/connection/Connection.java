@@ -1,5 +1,7 @@
 package connection;
 
+import java.util.List;
+import model.Country;
 import model.Game;
 import model.Team;
 import model.User;
@@ -14,6 +16,10 @@ public interface Connection {
 
     boolean createUser(User u);
 
+    List<Country> findCountryes();
+    
+    List<Team> findTeams();
+    
     boolean createTeam(Team t);
 
     boolean createGame(Game g, Team a, Team b);

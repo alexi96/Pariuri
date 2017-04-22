@@ -16,5 +16,4 @@ public class Application {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

@@ -75,3 +75,11 @@ $RECYCLE.BIN/
 /HiRPC/build/
 /HiRPC/dist/
 /WebServer/build/
+/Test/nbproject/private/
+/Test/build/
+/ManagerWebServer/nbproject/private/
+/ManagerWebServer/build/
+/WebLibrary/nbproject/private/
+/WebLibrary/dist/
+/WebLibrary/build/
+/ManagerWebServer/dist/
