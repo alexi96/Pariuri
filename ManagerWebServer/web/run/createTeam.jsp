@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <jsp:useBean id="team" class="model.Team" scope="page" />
+        <jsp:useBean id="team" class="model.Team" scope="request" />
         <jsp:setProperty name="team" property="name" param="teamName" />
         <jsp:setProperty name="team" property="country" param="country" />
         <%
