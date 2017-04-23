@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -31,6 +32,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import model.Country;
 import model.Game;
+import model.StatisticType;
 import model.Team;
 import model.User;
 
@@ -191,6 +193,19 @@ public class BetServer implements Connection {
     }
 
     @Override
+    public List<Game> findFutureGames() {
+        try {
+            List<GameDB> all = this.pu.selectNative(GameDB.class, "select g.* from `game` g where not exists (select id from `result` where game = g.id )");
+            List<Game> res = new ArrayList<>();
+            all.forEach((c) -> res.add(BetServer.model(c, Game.class)));
+            return res;
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
     public boolean createGame(Game g, Team a, Team b) {
         PlaysDB pa = new PlaysDB();
         PlaysDB pb = new PlaysDB();
@@ -224,7 +239,20 @@ public class BetServer implements Connection {
     }
 
     @Override
-    public void createScore(Game g, float... statistics) {
+    public List<StatisticType> findStatisticTypes() {
+        try {
+            List<StatisticTypeDB> all = this.pu.select(StatisticTypeDB.class);
+            List<StatisticType> res = new ArrayList<>();
+            all.forEach((c) -> res.add(BetServer.model(c, StatisticType.class)));
+            return res;
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public boolean createScore(Game g, float... statistics) {
         try {
             GameDB gdb = BetServer.model(g, GameDB.class);
 
@@ -239,9 +267,11 @@ public class BetServer implements Connection {
 
                 ++index;
             }
+            return true;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
     }
 
     public static <T, F> T model(F fo, Class<T> tc) {

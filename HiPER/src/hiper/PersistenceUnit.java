@@ -30,6 +30,10 @@ public class PersistenceUnit {
         this.connect(url, user, pass);
     }
 
+    public Statement getStatement() {
+        return statement;
+    }
+
     public final void connect(String url) throws SQLException {
         this.connection = DriverManager.getConnection(url);
         this.statement = this.connection.createStatement();
@@ -62,6 +66,31 @@ public class PersistenceUnit {
 
         List<E> res = new ArrayList<>();
 
+        while (rs.next()) {
+            try {
+                Constructor<E> cons = clazz.getDeclaredConstructor();
+                cons.setAccessible(true);
+                E r = cons.newInstance();
+                em.select(rs, r);
+                res.add(r);
+            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return res;
+    }
+
+    public <E> List<E> selectNative(Class<E> clazz, String sql) throws IllegalArgumentException, SQLException {
+        EntityManager em = this.managers.get(clazz);
+
+        if (em == null) {
+            throw new IllegalArgumentException("No registerd table with this name.");
+        }
+        
+        ResultSet rs = this.statement.executeQuery(sql);
+
+        List<E> res = new ArrayList<>();
         while (rs.next()) {
             try {
                 Constructor<E> cons = clazz.getDeclaredConstructor();
@@ -171,4 +200,5 @@ public class PersistenceUnit {
             Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 }

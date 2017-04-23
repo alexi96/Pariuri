@@ -1,3 +1,6 @@
+<%@page import="model.Game"%>
+<%@page import="web.WebGame"%>
+<%@page import="model.StatisticType"%>
 <%@page import="model.Country"%>
 <%@page import="controllers.MainController"%>
 <%@page import="model.Team"%>
@@ -60,5 +63,31 @@
             <%}%>
         </select>
         <input type="submit" value="Create team" />
+    </fieldset>
+</form>
+<form action="${pageContext.request.contextPath}/run/createResults.jsp" method="post">
+    <fieldset>
+        <legend>Create results:</legend>
+        <label for="resultGame">Game</label>
+        <select id="resultGame" name="resultGame">
+            <%
+                List<Game> allGm = MainController.getInstance().getConnection().findFutureGames();
+                for (Game t : allGm) {
+            %>
+            <option value="<%=t.getId()%>"><%=t.getName()%></option>
+            <%}%>
+        </select>
+        <%
+            List<StatisticType> allSt = MainController.getInstance().getConnection().findStatisticTypes();
+            int index = 0;
+            for (StatisticType t : allSt) {
+        %>
+        <label for="result<%=index%>"><%=t.getName()%></label>
+        <input type="number" id="result<%=index%>" name="result<%=index%>">
+        <%
+                ++index;
+            }
+        %>
+        <input type="submit" value="Create results" />
     </fieldset>
 </form>
