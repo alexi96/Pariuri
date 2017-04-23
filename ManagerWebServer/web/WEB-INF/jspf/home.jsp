@@ -30,7 +30,7 @@
         <input type="submit" value="Create team" />
     </fieldset>
 </form>
-<form  method="post">
+<form action="${pageContext.request.contextPath}/run/createGame.jsp" method="post">
     <fieldset>
         <legend>Create game:</legend>
         <label for="gameName">Name</label>

@@ -11,6 +11,10 @@ public class Team implements Serializable, Comparable<Team> {
     public Team() {
     }
 
+    public Team(Integer id) {
+        this.id = id;
+    }
+
     public Team(Integer id, String name, Integer country) {
         this.id = id;
         this.name = name;

@@ -8,6 +8,7 @@ import db.TeamDB;
 import db.GameDB;
 import db.ResultDB;
 import db.PlaysDB;
+import hiper.EntityManager;
 import hiper.PersistenceUnit;
 import hiper.QueryBy;
 import java.lang.reflect.Constructor;
@@ -198,16 +199,25 @@ public class BetServer implements Connection {
         TeamDB tb = BetServer.model(b, TeamDB.class);
         GameDB t = BetServer.model(g, GameDB.class);
 
-        pa.setGame(t.getId());
-        pb.setGame(t.getId());
         pa.setTeam(ta.getId());
         pb.setTeam(tb.getId());
 
         try {
+            this.pu.create(t);
+
+            QueryBy<GameDB> q = new QueryBy<>(GameDB.class);
+            q.parameter("date", EntityManager.getDatabaseFormat().format(t.getDate()));
+            q.parameter("name", t.getName());
+            
+            t = this.pu.select(q).get(0);
+            
+            pa.setGame(t.getId());
+            pb.setGame(t.getId());
+
             this.pu.create(pa);
             this.pu.create(pb);
             return true;
-        } catch (IllegalArgumentException | SQLException ex) {
+        } catch (IllegalArgumentException | SQLException | IndexOutOfBoundsException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;

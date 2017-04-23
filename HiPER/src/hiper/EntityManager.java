@@ -18,6 +18,7 @@ public class EntityManager<E> {
 
     private static final HashMap<Class, ToQl> TO_QLS = new HashMap<>();
     private static final HashMap<Class, FromQl> FROM_QLS = new HashMap<>();
+    private static final SimpleDateFormat DATABASE_FORMAT = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 
     static {
         EntityManager.TO_QLS.put(String.class, (v) -> "'" + v + "'");
@@ -29,8 +30,13 @@ public class EntityManager<E> {
         EntityManager.TO_QLS.put(Float.class, simple);
         EntityManager.TO_QLS.put(float.class, simple);
         EntityManager.TO_QLS.put(Double.class, simple);
-        final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-        EntityManager.TO_QLS.put(Date.class, (v) -> "'" + sdf.format(v) + "'");
+        EntityManager.TO_QLS.put(Date.class, (v) -> {
+            if (v instanceof Date) {
+                return "'" + DATABASE_FORMAT.format(v) + "'";
+            } else {
+                return "'" + v + "'";
+            }
+        });
 
         EntityManager.FROM_QLS.put(String.class, (r, f) -> r.getString(f));
         EntityManager.FROM_QLS.put(Long.class, (r, f) -> r.getLong(f));
@@ -38,6 +44,8 @@ public class EntityManager<E> {
         EntityManager.FROM_QLS.put(Short.class, (r, f) -> r.getShort(f));
         EntityManager.FROM_QLS.put(Byte.class, (r, f) -> r.getByte(f));
         EntityManager.FROM_QLS.put(Float.class, (r, f) -> r.getFloat(f));
+        EntityManager.FROM_QLS.put(float.class, (r, f) -> r.getFloat(f));
+        EntityManager.FROM_QLS.put(Date.class, (r, f) -> r.getDate(f));
         EntityManager.FROM_QLS.put(Double.class, (r, f) -> r.getDouble(f));
     }
 
@@ -245,5 +253,9 @@ public class EntityManager<E> {
             f.set(e, ql.value(res, this.fields.get(f)));
         }
         return e;
+    }
+
+    public static SimpleDateFormat getDatabaseFormat() {
+        return DATABASE_FORMAT;
     }
 }

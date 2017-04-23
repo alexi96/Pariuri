@@ -3,7 +3,6 @@ package test;
 import hiper.PersistenceUnit;
 import hiper.QueryBy;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +15,7 @@ public class Test {
             pu.register(StatisticTypeDB.class);
             pu.register(UserDB.class);
 
-            /*for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 pu.create(new StatisticTypeDB(i, "name " + (8 * i)));
             }
 
@@ -39,11 +38,7 @@ public class Test {
             QueryBy uq = new QueryBy(UserDB.class);
             uq.parameter("email", "alex_i96@yahoo.com");
             uq.parameter("password", "pass");
-            System.out.println(pu.select(uq))*/;
-            
-            pu.register(GameDB.class);
-            GameDB g = new GameDB("name", 50, new Date(), "a game");
-            pu.create(g);
+            System.out.println(pu.select(uq));
         } catch (SQLException | IllegalArgumentException ex) {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }

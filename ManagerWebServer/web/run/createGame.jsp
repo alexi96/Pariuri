@@ -1,3 +1,4 @@
+<%@page import="model.Team"%>
 <jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
 <!DOCTYPE html>
 <html>
@@ -7,10 +8,35 @@
         <jsp:setProperty name="game" property="dateAsText" param="date" />
         <jsp:setProperty name="game" property="name" param="gameName" />
         <jsp:setProperty name="game" property="description" param="description" />
+        <%
+            int ta = Integer.parseInt(request.getParameter("teamA"));
+            int tb = Integer.parseInt(request.getParameter("teamB"));
+            boolean succ = game.create(ta, tb);
+        %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <%if (succ) {%>
+        <title>Game ${game.name} created!</title>
+        <%} else {%>
+        <title>Error creating game</title>
+        <%}%>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <%if (succ) {
+        %>
+        <h1>Game ${game.name} created!</h1>
+        <p>
+            ${game.chance}
+        </p>
+        <p>
+            ${game.description}
+        </p>
+        <p>
+        </p>
+        <%} else {%>
+        <h1>Error creating game</h1>
+        <%}%>
+        <form action="${pageContext.request.contextPath}/index.jsp" method="post">
+            <input type="submit" value="Back">
+        </form>
     </body>
 </html>
