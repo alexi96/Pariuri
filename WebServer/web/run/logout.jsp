@@ -1,8 +1,8 @@
-<jsp:directive.page import="web.WebUser" />
+<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
 <jsp:useBean id="user" class="web.WebUser" scope="session" />
 <jsp:setProperty name="user" property="*" />
 <%
-    user.log();
+    user.logOut();
 %>
 <!DOCTYPE html>
 <html>

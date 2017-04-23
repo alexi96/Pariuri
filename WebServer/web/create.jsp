@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <jsp:useBean id="created" scope="page" class="web.WebUser" />
+        <jsp:useBean id="created" scope="session" class="web.WebUser" />
         <jsp:setProperty name="created" property="*" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="resources/createstyle.css" rel="stylesheet" type="text/css"/>

@@ -1,10 +1,12 @@
 package web;
 
 import connection.Connection;
+import controllers.MainController;
 import model.User;
 
 public class WebUser extends User {
-    private final Connection mainController=null;// = MainController.getInstance().getConnection();
+
+    private final Connection mainController = MainController.getInstance().getConnection();
 
     public WebUser() {
     }
@@ -21,18 +23,12 @@ public class WebUser extends User {
         super(username, password, firstName, lastName, email);
     }
 
-    public void log() {
-        this.log(this.username, this.password);
+    public boolean log() {
+        return this.log(this.username, this.password);
     }
-
-    public void log(String user, String pass) {
-        User u = this.mainController.log(user, pass);
-
-        if (u == null) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed!", "Worng username or password!"));
-            return;
-        }
-
+    
+    public void logOut() {
+        User u = new User();
         super.id = u.getId();
         super.username = u.getUsername();
         this.password = u.getPassword();
@@ -41,14 +37,25 @@ public class WebUser extends User {
         this.email = u.getEmail();
     }
 
-    public String create() {
-        User u = new User(username, password, super.firstName, super.lastName, email);
-        boolean r = this.mainController.createUser(u);
-        if (!r) {
-            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "username already exists!", "Username already exists!"));
-            return "error";
+    public boolean log(String user, String pass) {
+        User u = this.mainController.log(user, pass);
+
+        if (u == null) {
+            return false;
         }
-        return "created";
+
+        super.id = u.getId();
+        super.username = u.getUsername();
+        this.password = u.getPassword();
+        super.firstName = u.getFirstName();
+        super.lastName = u.getLastName();
+        this.email = u.getEmail();
+        return true;
+    }
+
+    public boolean create() {
+        User u = new User(username, password, super.firstName, super.lastName, email);
+        return this.mainController.createUser(u);
     }
 
     public void edit() {

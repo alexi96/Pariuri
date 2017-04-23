@@ -14,17 +14,10 @@
         <%}%>
     </head>
     <body>
-        <div id="upd">
-            <%if (user.getId() == null) {%>
-            <jsp:include page="/WEB-INF/jspf/log.jsp" />
-            <%} else {%>
-            <jsp:include page="/WEB-INF/jspf/home.jsp" />
-            <%}%>
-        </div>
-        <form>
-            ${user.username}
-            <input type="text" name="username"/>
-            <input type="submit"/>
-        </form>
+        <%if (user.getId() == null) {%>
+        <jsp:include page="/WEB-INF/jspf/log.jsp" />
+        <%} else {%>
+        <jsp:include page="/WEB-INF/jspf/home.jsp" />
+        <%}%>
     </body>
 </html>
