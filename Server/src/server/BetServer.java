@@ -1,6 +1,7 @@
 package server;
 
 import connection.Connection;
+import db.CountryDB;
 import db.StatisticTypeDB;
 import db.UserDB;
 import db.TeamDB;
@@ -41,6 +42,11 @@ public class BetServer implements Connection {
             this.pu = new PersistenceUnit("jdbc:mysql://localhost:3306/pariuri", "root", "");
             this.pu.register(UserDB.class);
             this.pu.register(StatisticTypeDB.class);
+            this.pu.register(TeamDB.class);
+            this.pu.register(GameDB.class);
+            this.pu.register(ResultDB.class);
+            this.pu.register(PlaysDB.class);
+            this.pu.register(CountryDB.class);
         } catch (SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -130,7 +136,10 @@ public class BetServer implements Connection {
     @Override
     public List<Country> findCountryes() {
         try {
-            return this.pu.select(Country.class);
+            List<CountryDB> all = this.pu.select(CountryDB.class);
+            List<Country> res = new ArrayList<>();
+            all.forEach((c) -> res.add(BetServer.model(c, Country.class)));
+            return res;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -138,9 +147,23 @@ public class BetServer implements Connection {
     }
 
     @Override
+    public Country findCountry(int id) {
+        try {
+            CountryDB c = this.pu.select(CountryDB.class, id);
+            return BetServer.model(c, Country.class);
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
     public List<Team> findTeams() {
         try {
-            return this.pu.select(Team.class);
+            List<TeamDB> all = this.pu.select(TeamDB.class);
+            List<Team> res = new ArrayList<>();
+            all.forEach((c) -> res.add(BetServer.model(c, Team.class)));
+            return res;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }

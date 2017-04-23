@@ -20,9 +20,9 @@
         <select name="country">
             <%
                 List<Country> allCountryes = MainController.getInstance().getConnection().findCountryes();
-                for (Object c : allCountryes) {
+                for (Country c : allCountryes) {
             %>
-            <option value="${c.id}">${c.name}</option>
+            <option value="<%=c.getId()%>"><%=c.getName()%></option>
             <%}%>
         </select>
         <input type="submit" value="Create team" />
@@ -43,18 +43,18 @@
         <select name="teamA">
             <%
                 List<Team> allTeams = MainController.getInstance().getConnection().findTeams();
-                for (Object t : allTeams) {
+                for (Team t : allTeams) {
             %>
-            <option value="${t.id}">${t.name}</option>
+            <option value="<%=t.getId()%>"><%=t.getName()%></option>
             <%}%>
         </select>
         <label for="teamB">Team B</label>
         <select name="teamB">
             <%
                 allTeams = MainController.getInstance().getConnection().findTeams();
-                for (Object t : allTeams) {
+                for (Team t : allTeams) {
             %>
-            <option value="${t.id}">${t.name}</option>
+            <option value="<%=t.getId()%>"><%=t.getName()%></option>
             <%}%>
         </select>
         <input type="submit" value="Create team" />

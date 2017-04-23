@@ -14,8 +14,6 @@ public class TeamDB  implements Serializable{
     protected String name;
     @HiperField
     protected Integer country;
-    @HiperField
-    protected byte[] image;
 
     public TeamDB() {
     }
@@ -24,17 +22,15 @@ public class TeamDB  implements Serializable{
         this.id = id;
     }
 
-    public TeamDB(String name, Integer country, byte[] image) {
+    public TeamDB(String name, Integer country) {
         this.name = name;
         this.country = country;
-        this.image = image;
     }
 
-    public TeamDB(Integer id, String name, Integer country, byte[] image) {
+    public TeamDB(Integer id, String name, Integer country) {
         this.id = id;
         this.name = name;
         this.country = country;
-        this.image = image;
     }
 
     public Integer getId() {
@@ -59,14 +55,6 @@ public class TeamDB  implements Serializable{
 
     public void setCountry(Integer country) {
         this.country = country;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     @Override

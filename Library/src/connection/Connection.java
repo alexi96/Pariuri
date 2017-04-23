@@ -16,6 +16,8 @@ public interface Connection {
 
     boolean createUser(User u);
 
+    Country findCountry(int id);
+    
     List<Country> findCountryes();
     
     List<Team> findTeams();
