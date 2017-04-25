@@ -1,6 +1,7 @@
 package server;
 
 import connection.Connection;
+import db.ComposedTicketDB;
 import db.CountryDB;
 import db.StatisticTypeDB;
 import db.UserDB;
@@ -8,16 +9,13 @@ import db.TeamDB;
 import db.GameDB;
 import db.ResultDB;
 import db.PlaysDB;
+import db.TicketDB;
 import hiper.EntityManager;
 import hiper.PersistenceUnit;
 import hiper.QueryBy;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -34,7 +32,9 @@ import model.Country;
 import model.Game;
 import model.StatisticType;
 import model.Team;
+import model.Ticket;
 import model.User;
+import utilities.Conversion;
 
 public class BetServer implements Connection {
 
@@ -50,6 +50,8 @@ public class BetServer implements Connection {
             this.pu.register(ResultDB.class);
             this.pu.register(PlaysDB.class);
             this.pu.register(CountryDB.class);
+            this.pu.register(TicketDB.class);
+            this.pu.register(ComposedTicketDB.class);
         } catch (SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,7 +77,7 @@ public class BetServer implements Connection {
                 return null;
             }
 
-            User r = BetServer.model(t, User.class);
+            User r = Conversion.model(t, User.class);
             return r;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,7 +95,7 @@ public class BetServer implements Connection {
                 return false;
             }
 
-            UserDB udb = BetServer.model(u, UserDB.class);
+            UserDB udb = Conversion.model(u, UserDB.class);
             this.pu.create(udb);
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,7 +143,7 @@ public class BetServer implements Connection {
         try {
             List<CountryDB> all = this.pu.select(CountryDB.class);
             List<Country> res = new ArrayList<>();
-            all.forEach((c) -> res.add(BetServer.model(c, Country.class)));
+            all.forEach((c) -> res.add(Conversion.model(c, Country.class)));
             return res;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -153,7 +155,18 @@ public class BetServer implements Connection {
     public Country findCountry(int id) {
         try {
             CountryDB c = this.pu.select(CountryDB.class, id);
-            return BetServer.model(c, Country.class);
+            return Conversion.model(c, Country.class);
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public Team findTeam(int id) {
+        try {
+            TeamDB c = this.pu.select(TeamDB.class, id);
+            return Conversion.model(c, Team.class);
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -165,12 +178,33 @@ public class BetServer implements Connection {
         try {
             List<TeamDB> all = this.pu.select(TeamDB.class);
             List<Team> res = new ArrayList<>();
-            all.forEach((c) -> res.add(BetServer.model(c, Team.class)));
+            all.forEach((c) -> res.add(Conversion.model(c, Team.class)));
             return res;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public Team[] findTeams(Game g) {
+        try {
+            QueryBy<PlaysDB> q = new QueryBy<>(PlaysDB.class);
+            q.parameter("game", "" + g.getId());
+            List<PlaysDB> ps = this.pu.select(q);
+
+            Team[] res = new Team[2];
+
+            TeamDB t = this.pu.select(TeamDB.class, ps.get(0).getTeam());
+            res[0] = Conversion.model(t, Team.class);
+
+            t = this.pu.select(TeamDB.class, ps.get(1).getTeam());
+            res[1] = Conversion.model(t, Team.class);
+            return res;
+        } catch (Exception ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -183,7 +217,7 @@ public class BetServer implements Connection {
                 return false;
             }
 
-            TeamDB tdb = BetServer.model(t, TeamDB.class);
+            TeamDB tdb = Conversion.model(t, TeamDB.class);
             this.pu.create(tdb);
             return true;
         } catch (IllegalArgumentException | SQLException ex) {
@@ -193,11 +227,22 @@ public class BetServer implements Connection {
     }
 
     @Override
+    public Game findGame(int id) {
+        try {
+            GameDB c = this.pu.select(GameDB.class, id);
+            return Conversion.model(c, Game.class);
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
     public List<Game> findFutureGames() {
         try {
             List<GameDB> all = this.pu.selectNative(GameDB.class, "select g.* from `game` g where not exists (select id from `result` where game = g.id )");
             List<Game> res = new ArrayList<>();
-            all.forEach((c) -> res.add(BetServer.model(c, Game.class)));
+            all.forEach((c) -> res.add(Conversion.model(c, Game.class)));
             return res;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -210,9 +255,9 @@ public class BetServer implements Connection {
         PlaysDB pa = new PlaysDB();
         PlaysDB pb = new PlaysDB();
 
-        TeamDB ta = BetServer.model(a, TeamDB.class);
-        TeamDB tb = BetServer.model(b, TeamDB.class);
-        GameDB t = BetServer.model(g, GameDB.class);
+        TeamDB ta = Conversion.model(a, TeamDB.class);
+        TeamDB tb = Conversion.model(b, TeamDB.class);
+        GameDB t = Conversion.model(g, GameDB.class);
 
         pa.setTeam(ta.getId());
         pb.setTeam(tb.getId());
@@ -223,9 +268,9 @@ public class BetServer implements Connection {
             QueryBy<GameDB> q = new QueryBy<>(GameDB.class);
             q.parameter("date", EntityManager.getDatabaseFormat().format(t.getDate()));
             q.parameter("name", t.getName());
-            
+
             t = this.pu.select(q).get(0);
-            
+
             pa.setGame(t.getId());
             pb.setGame(t.getId());
 
@@ -239,11 +284,22 @@ public class BetServer implements Connection {
     }
 
     @Override
+    public StatisticType findStatisticType(int id) {
+        try {
+            StatisticTypeDB c = this.pu.select(StatisticTypeDB.class, id);
+            return Conversion.model(c, StatisticType.class);
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
     public List<StatisticType> findStatisticTypes() {
         try {
             List<StatisticTypeDB> all = this.pu.select(StatisticTypeDB.class);
             List<StatisticType> res = new ArrayList<>();
-            all.forEach((c) -> res.add(BetServer.model(c, StatisticType.class)));
+            all.forEach((c) -> res.add(Conversion.model(c, StatisticType.class)));
             return res;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -254,7 +310,7 @@ public class BetServer implements Connection {
     @Override
     public boolean createScore(Game g, float... statistics) {
         try {
-            GameDB gdb = BetServer.model(g, GameDB.class);
+            GameDB gdb = Conversion.model(g, GameDB.class);
 
             List<StatisticTypeDB> all = this.pu.select(StatisticTypeDB.class);
             int index = 0;
@@ -274,40 +330,25 @@ public class BetServer implements Connection {
         return false;
     }
 
-    public static <T, F> T model(F fo, Class<T> tc) {
+    @Override
+    public boolean createComposedTiket(User user, Collection<Ticket> simpleTickets) {
         try {
-            Class<F> fc = (Class<F>) fo.getClass();
-            Constructor<T> tCons = tc.getDeclaredConstructor();
-            tCons.setAccessible(true);
-            T to = tCons.newInstance();
+            ComposedTicketDB ct = new ComposedTicketDB();
+            ct.setUser(user.getId());
 
-            Field[] tfs = tc.getDeclaredFields();
-            for (Field tf : tfs) {
-                if (Modifier.isStatic(tf.getModifiers())) {
-                    continue;
-                }
-
-                try {
-                    Field ff = fc.getDeclaredField(tf.getName());
-
-                    ff.setAccessible(true);
-                    tf.setAccessible(true);
-
-                    if (ff.getType().equals(tf.getType())) {
-                        tf.set(to, ff.get(fo));
-                    } else {
-                        Object t = BetServer.model(ff.get(fo), tf.getType());
-                        if (t != null) {
-                            tf.set(to, t);
-                        }
-                    }
-                } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-                }
+            this.pu.create(ct);
+            int ctu = this.pu.lastId();
+            
+            for (Ticket s : simpleTickets) {
+                s.setComposedTicket(ctu);
+                TicketDB sdb = Conversion.model(s, TicketDB.class);
+                this.pu.create(sdb);
             }
-            return to;
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+
+            return true;
+        } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return false;
     }
 }

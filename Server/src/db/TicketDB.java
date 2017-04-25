@@ -7,14 +7,19 @@ import java.io.Serializable;
 
 @HiperEntity("ticket")
 public class TicketDB implements Serializable {
+
     @HiperPrimaryKey
     @HiperField
     protected Integer id;
+    @HiperField
+    protected float ammount;
     @HiperField
     protected float value;
     @HiperField
     protected byte operation;
     @HiperField
+    protected Integer game;
+    @HiperField("composed_ticket")
     protected Integer composedTicket;
     @HiperField
     protected Integer type;
@@ -26,17 +31,21 @@ public class TicketDB implements Serializable {
         this.id = id;
     }
 
-    public TicketDB(float value, byte operation, Integer composedTicket, Integer type) {
+    public TicketDB(float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
+        this.ammount = ammount;
         this.value = value;
         this.operation = operation;
+        this.game = game;
         this.composedTicket = composedTicket;
         this.type = type;
     }
 
-    public TicketDB(Integer id, float value, byte operation, Integer composedTicket, Integer type) {
+    public TicketDB(Integer id, float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
         this.id = id;
+        this.ammount = ammount;
         this.value = value;
         this.operation = operation;
+        this.game = game;
         this.composedTicket = composedTicket;
         this.type = type;
     }
@@ -47,6 +56,14 @@ public class TicketDB implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public float getAmmount() {
+        return ammount;
+    }
+
+    public void setAmmount(float ammount) {
+        this.ammount = ammount;
     }
 
     public float getValue() {
@@ -63,6 +80,14 @@ public class TicketDB implements Serializable {
 
     public void setOperation(byte operation) {
         this.operation = operation;
+    }
+
+    public Integer getGame() {
+        return game;
+    }
+
+    public void setGame(Integer game) {
+        this.game = game;
     }
 
     public Integer getComposedTicket() {

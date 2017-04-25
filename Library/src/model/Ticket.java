@@ -5,19 +5,36 @@ import java.io.Serializable;
 public class Ticket implements Serializable, Comparable<Ticket> {
 
     protected Integer id;
+    protected float ammount;
     protected float value;
-    protected Integer operation;
-    protected Integer composed_ticket;
+    protected byte operation;
+    protected Integer game;
+    protected Integer composedTicket;
     protected Integer type;
 
     public Ticket() {
     }
 
-    public Ticket(Integer id, float value, Integer operation, Integer composed_ticket, Integer type) {
+    public Ticket(Integer id) {
         this.id = id;
+    }
+
+    public Ticket(float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
+        this.ammount = ammount;
         this.value = value;
         this.operation = operation;
-        this.composed_ticket = composed_ticket;
+        this.game = game;
+        this.composedTicket = composedTicket;
+        this.type = type;
+    }
+
+    public Ticket(Integer id, float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
+        this.id = id;
+                this.ammount = ammount;
+        this.value = value;
+        this.operation = operation;
+        this.game = game;
+        this.composedTicket = composedTicket;
         this.type = type;
     }
 
@@ -29,6 +46,14 @@ public class Ticket implements Serializable, Comparable<Ticket> {
         this.id = id;
     }
 
+    public float getAmmount() {
+        return ammount;
+    }
+
+    public void setAmmount(float ammount) {
+        this.ammount = ammount;
+    }
+
     public float getValue() {
         return value;
     }
@@ -37,20 +62,28 @@ public class Ticket implements Serializable, Comparable<Ticket> {
         this.value = value;
     }
 
-    public Integer getOperation() {
+    public byte getOperation() {
         return operation;
     }
 
-    public void setOperation(Integer operation) {
+    public void setOperation(byte operation) {
         this.operation = operation;
     }
 
-    public Integer getComposed_ticket() {
-        return composed_ticket;
+    public Integer getGame() {
+        return game;
     }
 
-    public void setComposed_ticket(Integer composed_ticket) {
-        this.composed_ticket = composed_ticket;
+    public void setGame(Integer game) {
+        this.game = game;
+    }
+
+    public Integer getComposedTicket() {
+        return composedTicket;
+    }
+
+    public void setComposedTicket(Integer composedTicket) {
+        this.composedTicket = composedTicket;
     }
 
     public Integer getType() {

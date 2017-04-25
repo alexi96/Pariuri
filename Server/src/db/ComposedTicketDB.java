@@ -12,8 +12,6 @@ public class ComposedTicketDB implements Serializable {
     @HiperField
     protected Integer id;
     @HiperField
-    protected Integer game;
-    @HiperField
     protected Integer user;
 
     public ComposedTicketDB() {
@@ -23,14 +21,8 @@ public class ComposedTicketDB implements Serializable {
         this.id = id;
     }
 
-    public ComposedTicketDB(Integer id, Integer game, Integer user) {
+    public ComposedTicketDB(Integer id, Integer user) {
         this.id = id;
-        this.game = game;
-        this.user = user;
-    }
-
-    public ComposedTicketDB(Integer game, Integer user) {
-        this.game = game;
         this.user = user;
     }
 
@@ -40,14 +32,6 @@ public class ComposedTicketDB implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getGame() {
-        return game;
-    }
-
-    public void setGame(Integer game) {
-        this.game = game;
     }
 
     public Integer getUser() {

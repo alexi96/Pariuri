@@ -5,3 +5,7 @@
 <form action="${pageContext.request.contextPath}/run/logout.jsp" method="post">
     <input type="submit" value="Log out">
 </form>
+
+<form action="${pageContext.request.contextPath}/createTicket.jsp" method="post">
+    <input type="submit" value="Create ticket" />
+</form>

@@ -24,12 +24,17 @@ public class EntityManager<E> {
         EntityManager.TO_QLS.put(String.class, (v) -> "'" + v + "'");
         ToQl simple = (v) -> "" + v;
         EntityManager.TO_QLS.put(Long.class, simple);
+        EntityManager.TO_QLS.put(long.class, simple);
         EntityManager.TO_QLS.put(Integer.class, simple);
+        EntityManager.TO_QLS.put(int.class, simple);
         EntityManager.TO_QLS.put(Short.class, simple);
+        EntityManager.TO_QLS.put(short.class, simple);
         EntityManager.TO_QLS.put(Byte.class, simple);
+        EntityManager.TO_QLS.put(byte.class, simple);
         EntityManager.TO_QLS.put(Float.class, simple);
         EntityManager.TO_QLS.put(float.class, simple);
         EntityManager.TO_QLS.put(Double.class, simple);
+        EntityManager.TO_QLS.put(double.class, simple);
         EntityManager.TO_QLS.put(Date.class, (v) -> {
             if (v instanceof Date) {
                 return "'" + DATABASE_FORMAT.format(v) + "'";
@@ -40,13 +45,18 @@ public class EntityManager<E> {
 
         EntityManager.FROM_QLS.put(String.class, (r, f) -> r.getString(f));
         EntityManager.FROM_QLS.put(Long.class, (r, f) -> r.getLong(f));
+        EntityManager.FROM_QLS.put(long.class, (r, f) -> r.getLong(f));
         EntityManager.FROM_QLS.put(Integer.class, (r, f) -> r.getInt(f));
+        EntityManager.FROM_QLS.put(int.class, (r, f) -> r.getInt(f));
         EntityManager.FROM_QLS.put(Short.class, (r, f) -> r.getShort(f));
+        EntityManager.FROM_QLS.put(short.class, (r, f) -> r.getShort(f));
         EntityManager.FROM_QLS.put(Byte.class, (r, f) -> r.getByte(f));
+        EntityManager.FROM_QLS.put(byte.class, (r, f) -> r.getByte(f));
         EntityManager.FROM_QLS.put(Float.class, (r, f) -> r.getFloat(f));
         EntityManager.FROM_QLS.put(float.class, (r, f) -> r.getFloat(f));
-        EntityManager.FROM_QLS.put(Date.class, (r, f) -> r.getDate(f));
         EntityManager.FROM_QLS.put(Double.class, (r, f) -> r.getDouble(f));
+        EntityManager.FROM_QLS.put(double.class, (r, f) -> r.getDouble(f));
+        EntityManager.FROM_QLS.put(Date.class, (r, f) -> r.getDate(f));
     }
 
     private Class<E> clazz;
