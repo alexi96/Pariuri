@@ -11,7 +11,7 @@
 <html>
     <head>
         <jsp:useBean id="conposedTicket" class="web.WebConposedTicket" scope="session"/>
-        <jsp:setProperty name="conposedTicket" property="*" />
+        <jsp:setProperty name="conposedTicket" property="user" param="user" />
         <jsp:useBean id="ticket" class="model.Ticket" scope="session"/>
         <jsp:setProperty name="ticket" property="*" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

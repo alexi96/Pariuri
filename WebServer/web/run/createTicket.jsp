@@ -9,20 +9,21 @@
         <jsp:useBean id="user" class="web.WebUser" scope="session" />
         <jsp:setProperty name="user" property="*" />
         <jsp:useBean id="conposedTicket" class="web.WebConposedTicket" scope="session"/>
-        <jsp:setProperty name="conposedTicket" property="*" />
+        <jsp:setProperty name="conposedTicket" property="user" param="user" />
         <%
             Connection con = MainController.getInstance().getConnection();
-            boolean succ = con.createComposedTiket(new User(user.getId()), conposedTicket.getTickets());
+            Integer ticketId = con.createComposedTiket(new User(user.getId()), conposedTicket.getTickets());
+            boolean succ = ticketId != null;
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%if (succ) {%>
-        <title>Ticket created for ${user.username}</title> 
+        <title>Ticket <%=ticketId%> created for ${user.username}</title> 
         <%} else {%>
         <title>Error creating ticket!</title> 
         <%}%>
     </head>
     <body>
-        <h1>Ticket created for ${user.username}</h1> 
+        <h1>Ticket <%=ticketId%> created for ${user.username}</h1> 
         <%
             if (succ) {
                 for (Ticket t : conposedTicket.getTickets()) {

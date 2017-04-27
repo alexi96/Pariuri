@@ -5,7 +5,7 @@
     <div class="imgcontainer">
         <img src="resources/csgobet.png" class="imagine "/>
     </div>
-    <form action="${pageContext.request.contextPath}/run/log.jsp" method="post" >
+    <form action="${pageContext.request.contextPath}/run/log" method="post" >
         <div class="container">
             Username: <input type="text" name="username" required />
             Password: <input type="password" name="password" required />

@@ -85,3 +85,8 @@ $RECYCLE.BIN/
 /ManagerWebServer/dist/
 /Server/build/
 /HiPER/dist/
+/Lab9Web/nbproject/private/
+/Lab9Client/nbproject/private/
+/Lab9Web/build/
+/Lab9Web/dist/
+/WebServer/dist/

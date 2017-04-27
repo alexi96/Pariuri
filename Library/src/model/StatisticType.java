@@ -2,13 +2,16 @@ package model;
 
 import java.io.Serializable;
 
-public class StatisticType implements Serializable, Comparable<StatisticType>{
-        
+public class StatisticType implements Serializable, Comparable<StatisticType> {
+
     protected Integer id;
     protected String name;
-    
+
     public StatisticType() {
-        
+    }
+
+    public StatisticType(Integer id) {
+        this.id = id;
     }
 
     public StatisticType(Integer id, String name) {
@@ -31,6 +34,7 @@ public class StatisticType implements Serializable, Comparable<StatisticType>{
     public void setName(String name) {
         this.name = name;
     }
+
     @Override
     public int compareTo(StatisticType o) {
         return this.name.compareTo(o.name);

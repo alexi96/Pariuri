@@ -16,8 +16,11 @@ import hiper.QueryBy;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Authenticator;
@@ -28,8 +31,10 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import model.ComposedTicket;
 import model.Country;
 import model.Game;
+import model.Result;
 import model.StatisticType;
 import model.Team;
 import model.Ticket;
@@ -331,24 +336,128 @@ public class BetServer implements Connection {
     }
 
     @Override
-    public boolean createComposedTiket(User user, Collection<Ticket> simpleTickets) {
+    public Integer createComposedTiket(User user, Collection<Ticket> simpleTickets) {
         try {
-            ComposedTicketDB ct = new ComposedTicketDB();
-            ct.setUser(user.getId());
+            ComposedTicketDB ct = new ComposedTicketDB(user.getId(), new Date(), false);
 
             this.pu.create(ct);
             int ctu = this.pu.lastId();
-            
+
             for (Ticket s : simpleTickets) {
                 s.setComposedTicket(ctu);
                 TicketDB sdb = Conversion.model(s, TicketDB.class);
                 this.pu.create(sdb);
             }
 
-            return true;
+            return ctu;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return null;
+    }
+
+    @Override
+    public TreeSet<ComposedTicket> findComposedTickets(User u) {
+        try {
+            QueryBy q = new QueryBy(ComposedTicketDB.class);
+            q.parameter("user", "" + u.getId());
+
+            TreeSet<ComposedTicket> res = new TreeSet<>();
+            List<ComposedTicketDB> ts = this.pu.select(q);
+            for (ComposedTicketDB t : ts) {
+                res.add(Conversion.model(t, ComposedTicket.class));
+            }
+            return res;
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new TreeSet<>();
+    }
+
+    @Override
+    public ArrayList<Ticket> findTickets(ComposedTicket ct) {
+        try {
+            QueryBy q = new QueryBy(TicketDB.class);
+            q.parameter("composedTicket", "" + ct.getId());
+
+            ArrayList<Ticket> res = new ArrayList<>();
+            List<TicketDB> ts = this.pu.select(q);
+            for (TicketDB t : ts) {
+                res.add(Conversion.model(t, Ticket.class));
+            }
+            return res;
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<Result> findResults(Game g) {
+        try {
+            QueryBy q = new QueryBy(ResultDB.class);
+            q.parameter("game", "" + g.getId());
+
+            ArrayList<Result> res = new ArrayList<>();
+            List<ResultDB> ts = this.pu.select(q);
+            for (ResultDB t : ts) {
+                res.add(Conversion.model(t, Result.class));
+            }
+            return res;
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Result findResult(Game g, StatisticType t) {
+        try {
+            QueryBy q = new QueryBy(ResultDB.class);
+            q.parameter("game", "" + g.getId());
+            q.parameter("game", "" + t.getId());
+
+            ArrayList<Result> res = new ArrayList<>();
+            List<ResultDB> ts = this.pu.select(q);
+            if (ts.isEmpty()) {
+                return null;
+            }
+            return Conversion.model(ts, Result.class);
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private boolean ticketWon(Ticket t) {
+        StatisticType type = this.findStatisticType(t.getComposedTicket());
+        Result res = this.findResult(new Game(t.getGame()), type);
+
+        float error = t.getOperation();
+        return Math.abs(res.getValue() - t.getValue()) <= error;
+    }
+
+    @Override
+    public TreeMap<Ticket, Float> validateTicket(int id) {
+        try {
+            ComposedTicketDB ct = this.pu.select(ComposedTicketDB.class, id);
+
+            if (ct.isValidated()) {
+                return null;
+            }
+
+            List<Ticket> ts = this.findTickets(new ComposedTicket(id));
+            TreeMap<Ticket, Float> res = new TreeMap<>((x, y) -> x.getId() - y.getId());
+
+            for (Ticket t : ts) {
+                float multy = 1 + t.getOperation();
+                if (this.ticketWon(t)) {
+                    res.put(t, multy * t.getValue());
+                }
+            }
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

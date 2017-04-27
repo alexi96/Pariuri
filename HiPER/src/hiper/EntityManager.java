@@ -23,6 +23,8 @@ public class EntityManager<E> {
     static {
         EntityManager.TO_QLS.put(String.class, (v) -> "'" + v + "'");
         ToQl simple = (v) -> "" + v;
+        EntityManager.TO_QLS.put(Boolean.class, simple);
+        EntityManager.TO_QLS.put(boolean.class, simple);
         EntityManager.TO_QLS.put(Long.class, simple);
         EntityManager.TO_QLS.put(long.class, simple);
         EntityManager.TO_QLS.put(Integer.class, simple);
@@ -44,6 +46,8 @@ public class EntityManager<E> {
         });
 
         EntityManager.FROM_QLS.put(String.class, (r, f) -> r.getString(f));
+        EntityManager.FROM_QLS.put(Boolean.class, (r, f) -> r.getBoolean(f));
+        EntityManager.FROM_QLS.put(boolean.class, (r, f) -> r.getBoolean(f));
         EntityManager.FROM_QLS.put(Long.class, (r, f) -> r.getLong(f));
         EntityManager.FROM_QLS.put(long.class, (r, f) -> r.getLong(f));
         EntityManager.FROM_QLS.put(Integer.class, (r, f) -> r.getInt(f));

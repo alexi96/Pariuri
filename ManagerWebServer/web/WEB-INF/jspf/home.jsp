@@ -16,6 +16,9 @@
 <jsp:setProperty name="game" property="dateAsText" param="date"/>
 <jsp:setProperty name="game" property="name" param="gameName" />
 <jsp:setProperty name="game" property="description" param="description" />
+
+<jsp:useBean id="ticket" scope="request" class="model.ComposedTicket" />
+<jsp:setProperty name="ticket" property="id" param="ticketId" />
 <h1>Hello ${pageContext.request.remoteAddr}!</h1>
 <form action="${pageContext.request.contextPath}/run/createTeam.jsp" method="post">
     <fieldset>
@@ -89,5 +92,15 @@
             }
         %>
         <input type="submit" value="Create results" />
+    </fieldset>
+</form>
+<form action="${pageContext.request.contextPath}/run/validateTicket.jsp">
+    <fieldset>
+        <legend>
+            Validate ticket:
+        </legend>
+        <label for="ticketId">Ticket id</label>
+        <input type="number" name="ticketId"/>
+        <input type="submit" value="Validate"/>
     </fieldset>
 </form>
