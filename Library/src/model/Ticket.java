@@ -96,9 +96,7 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     @Override
     public int compareTo(Ticket o) {
-        Float tv = this.value;
-        Float ov = o.value;
-        return tv.compareTo(ov);
+        return this.id - o.id;
     }
 
     @Override

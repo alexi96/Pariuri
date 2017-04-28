@@ -206,7 +206,7 @@ public class BetServer implements Connection {
             t = this.pu.select(TeamDB.class, ps.get(1).getTeam());
             res[1] = Conversion.model(t, Team.class);
             return res;
-        } catch (Exception ex) {
+        } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -338,6 +338,13 @@ public class BetServer implements Connection {
     @Override
     public Integer createComposedTiket(User user, Collection<Ticket> simpleTickets) {
         try {
+            /*for (Ticket sts : simpleTickets) {
+                Result r = this.findResult(new Game(sts.getGame()), new StatisticType(1));
+                if (r != null) {
+                    return null;
+                }
+            }
+            */
             ComposedTicketDB ct = new ComposedTicketDB(user.getId(), new Date(), false);
 
             this.pu.create(ct);
@@ -361,6 +368,7 @@ public class BetServer implements Connection {
         try {
             QueryBy q = new QueryBy(ComposedTicketDB.class);
             q.parameter("user", "" + u.getId());
+            q.parameter("validated", "false");
 
             TreeSet<ComposedTicket> res = new TreeSet<>();
             List<ComposedTicketDB> ts = this.pu.select(q);
@@ -415,24 +423,20 @@ public class BetServer implements Connection {
         try {
             QueryBy q = new QueryBy(ResultDB.class);
             q.parameter("game", "" + g.getId());
-            q.parameter("game", "" + t.getId());
+            q.parameter("type", "" + t.getId());
 
-            ArrayList<Result> res = new ArrayList<>();
             List<ResultDB> ts = this.pu.select(q);
             if (ts.isEmpty()) {
                 return null;
             }
-            return Conversion.model(ts, Result.class);
+            return Conversion.model(ts.get(0), Result.class);
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    private boolean ticketWon(Ticket t) {
-        StatisticType type = this.findStatisticType(t.getComposedTicket());
-        Result res = this.findResult(new Game(t.getGame()), type);
-
+    private boolean ticketWon(Ticket t, Result res) {
         float error = t.getOperation();
         return Math.abs(res.getValue() - t.getValue()) <= error;
     }
@@ -447,14 +451,31 @@ public class BetServer implements Connection {
             }
 
             List<Ticket> ts = this.findTickets(new ComposedTicket(id));
-            TreeMap<Ticket, Float> res = new TreeMap<>((x, y) -> x.getId() - y.getId());
+            TreeMap<Ticket, Float> res = new TreeMap<>();
+
+            StatisticType type;
+            Result r;
 
             for (Ticket t : ts) {
+                type = this.findStatisticType(t.getType());
+                r = this.findResult(new Game(t.getGame()), type);
+                
+                if (r == null) {
+                    return null;
+                }
+                
                 float multy = 1 + t.getOperation();
-                if (this.ticketWon(t)) {
-                    res.put(t, multy * t.getValue());
+                if (this.ticketWon(t, r)) {
+                    res.put(t, multy * t.getAmmount());
+                } else {
+                    res.put(t, 0f);
                 }
             }
+            
+            ct.setValidated(true);
+            this.pu.edit(ct);
+            
+            return res;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }

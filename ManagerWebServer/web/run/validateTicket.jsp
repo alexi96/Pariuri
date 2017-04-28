@@ -1,3 +1,4 @@
+<%@page import="java.util.Collection"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Map"%>
 <%@page import="model.Ticket"%>
@@ -16,16 +17,20 @@
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%if (succ) {%>
-        <title>Ticket ${ticket} validated!</title>
+        <title>Ticket ${ticket.id} validated!</title>
         <%} else {%>
         <title>Error validateing ticket!</title>
         <%}%>
     </head>
     <body>
         <%if (succ) {%>
-        <h1>Ticket ${ticket} validated!</h1>
+        <h1>Ticket ${ticket.id} validated!</h1>
         <%
-            double sum = winnings.values().stream().mapToDouble((v) -> (double) v).sum();
+            Collection<Float> ws = winnings.values();
+            float sum = 0;
+            for (Float w : ws) {
+                sum += w;
+            }
         %>
         <p>You won <%=sum%>$</p>
         <%
@@ -37,7 +42,7 @@
         </p>
         <%}%>
         <%} else {%>
-        <h1>Error creating team</h1>
+        <h1>Error validating ticket!</h1>
         <%}%>
         <form action="${pageContext.request.contextPath}/index.jsp" method="post">
             <input type="submit" value="Back">
