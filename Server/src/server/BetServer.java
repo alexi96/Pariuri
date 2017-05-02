@@ -132,7 +132,8 @@ public class BetServer implements Connection {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 
             message.setSubject("CS GO Betting");
-            message.setContent("Merge?\n<h1 style=\"color: red\">MERGE BAAAA</h1>", "text/html");
+            message.setContent("Merge?\n<h1 style=\"color: red\">Bun venit la CS GO Betting!</h1>\n"
+                    + "<p>Contul dumneavoastra a fost creeat!</p>", "text/html");
 
             Transport.send(message);
             System.out.println("sent");
@@ -436,8 +437,8 @@ public class BetServer implements Connection {
         return null;
     }
 
-    private boolean ticketWon(Ticket t, Result res) {
-        float error = t.getOperation();
+    private boolean ticketWon(Ticket t, Result res, StatisticType type) {
+        float error = t.getOperation() * type.getDeviation();
         return Math.abs(res.getValue() - t.getValue()) <= error;
     }
 
@@ -464,8 +465,8 @@ public class BetServer implements Connection {
                     return null;
                 }
                 
-                float multy = 1 + t.getOperation();
-                if (this.ticketWon(t, r)) {
+                float multy = 1 - (float) t.getOperation() / 3f;
+                if (this.ticketWon(t, r, type)) {
                     res.put(t, multy * t.getAmmount());
                 } else {
                     res.put(t, 0f);

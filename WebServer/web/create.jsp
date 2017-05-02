@@ -42,16 +42,16 @@
                 Password
             </span>
             <span>                
-                <input id="password" type="text" name="password" required="true"/>
+                <input id="password" type="password" name="password" required="true"/>
             </span>
             <span>
                 <input type="submit" class="createbtn" value="Create"/>
             </span>
         </form>
         <form action="index.jsp" method="post" >
-        <span>
-            <input type="submit" value="Cancel" class="cancelbtn"/>
-        </span>
-    </form>
-</body>
+            <span>
+                <input type="submit" value="Cancel" class="cancelbtn"/>
+            </span>
+        </form>
+    </body>
 </html>

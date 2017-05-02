@@ -64,5 +64,10 @@
         <form action="${pageContext.request.contextPath}/run/createTicket.jsp" method="post">
             <input type="submit" value="Done" />
         </form>
+        <form action="${pageContext.request.contextPath}/index.jsp" method="post" >
+            <span>
+                <input type="submit" value="Cancel" class="cancelbtn"/>
+            </span>
+        </form>
     </body>
 </html>

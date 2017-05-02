@@ -13,6 +13,8 @@ public class StatisticTypeDB implements Serializable, Comparable<StatisticTypeDB
     protected Integer id;
     @HiperField
     protected String name;
+    @HiperField
+    protected float deviation;
 
     public StatisticTypeDB() {
     }
@@ -21,9 +23,10 @@ public class StatisticTypeDB implements Serializable, Comparable<StatisticTypeDB
         this.name = name;
     }
 
-    public StatisticTypeDB(Integer id, String name) {
+    public StatisticTypeDB(Integer id, String name, float deviation) {
         this.id = id;
         this.name = name;
+        this.deviation = deviation;
     }
 
     public Integer getId() {
@@ -40,6 +43,14 @@ public class StatisticTypeDB implements Serializable, Comparable<StatisticTypeDB
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public float getDeviation() {
+        return deviation;
+    }
+
+    public void setDeviation(float deviation) {
+        this.deviation = deviation;
     }
 
     @Override
