@@ -65,7 +65,7 @@
             <option value="<%=t.getId()%>"><%=t.getName()%></option>
             <%}%>
         </select>
-        <input type="submit" value="Create team" />
+        <input type="submit" value="Create game" />
     </fieldset>
 </form>
 <form action="${pageContext.request.contextPath}/run/createResults.jsp" method="post">

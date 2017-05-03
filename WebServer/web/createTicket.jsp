@@ -12,9 +12,10 @@
     <head>
         <jsp:useBean id="conposedTicket" class="web.WebConposedTicket" scope="session"/>
         <jsp:setProperty name="conposedTicket" property="user" param="user" />
-        <jsp:useBean id="ticket" class="model.Ticket" scope="session"/>
+        <jsp:useBean id="ticket" class="model.Ticket" scope="request"/>
         <jsp:setProperty name="ticket" property="*" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="resources/createTicketStyle.css" rel="stylesheet" type="text/css"/>
         <title>Create ticket</title>
     </head>
     <body>
@@ -69,5 +70,70 @@
                 <input type="submit" value="Cancel" class="cancelbtn"/>
             </span>
         </form>
+        <table>
+             <caption>Betting rules</caption>
+            <thead>
+                <tr>
+                    <td>
+
+                    </td>
+                    <%
+                        for (StatisticType t : allSt) {
+                    %>
+                    <td>
+                        <%=t.getName()%>
+                    </td>
+                    <%}%>
+                </tr>
+            </thead>
+            <tr>
+                <td>
+                    Deviation
+                </td>
+                <%
+                    for (StatisticType t : allSt) {
+                %>
+                <td>
+                    <%=t.getDeviation()%>
+                </td>
+                <%}%>
+            </tr>
+            <tr>
+                <td>
+                    Exact pay
+                </td>
+                <%
+                    for (StatisticType t : allSt) {
+                %>
+                <td>
+                    100%
+                </td>
+                <%}%>
+            </tr>
+            <tr>
+                <td>
+                    Medium pay
+                </td>
+                <%
+                    for (StatisticType t : allSt) {
+                %>
+                <td>
+                    <%=t.getMediumPay() * 100f%>%
+                </td>
+                <%}%>
+            </tr>
+            <tr>
+                <td>
+                    Far pay
+                </td>
+                <%
+                    for (StatisticType t : allSt) {
+                %>
+                <td>
+                    <%=t.getFarPay() * 100f%>%
+                </td>
+                <%}%>
+            </tr>
+        </table>
     </body>
 </html>

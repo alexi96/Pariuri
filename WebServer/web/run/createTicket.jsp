@@ -13,6 +13,7 @@
         <%
             Connection con = MainController.getInstance().getConnection();
             Integer ticketId = con.createComposedTiket(new User(user.getId()), conposedTicket.getTickets());
+
             boolean succ = ticketId != null;
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -31,12 +32,15 @@
         <p><%=t.getAmmount()%> <%=t.getValue()%> <%=con.findGame(t.getGame()).getName()%> <%=con.findStatisticType(t.getType()).getName()%> <%=t.getOperation()%></p>
         <%
             }
+            conposedTicket.getTickets().clear();
         } else {
         %>
         <h1>
             Unable to create ticket!
         </h1>
-        <%}%>
+        <%
+            }
+        %>
         <form action="${pageContext.request.contextPath}/index.jsp" method="post">
             <input type="submit" value="Home"/>
         </form>

@@ -30,7 +30,7 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     public Ticket(Integer id, float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
         this.id = id;
-                this.ammount = ammount;
+        this.ammount = ammount;
         this.value = value;
         this.operation = operation;
         this.game = game;

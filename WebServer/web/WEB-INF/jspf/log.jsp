@@ -15,6 +15,6 @@
     <form action="create.jsp" class="container" style="background-color:#f1f1f1">
         <input type="submit" value="Create"/>
         <input type="submit" value="Cancel"/>
-        <span class="psw">Forgot <a>password</a></span>
+        <span class="psw"><a href="${pageContext.request.contextPath}/recovery.jsp">Forgot password</a></span>
     </form>
 </div>

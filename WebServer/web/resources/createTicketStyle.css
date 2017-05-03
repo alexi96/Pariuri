@@ -1,0 +1,11 @@
+table, tr, td {
+    border: black 1px solid;
+}
+
+thead {
+    font-weight: bold;
+}
+
+tr>td:first-child {
+    font-style: italic;
+}

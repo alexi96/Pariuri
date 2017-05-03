@@ -5,12 +5,11 @@
         <jsp:useBean id="user" class="web.WebUser" scope="session" />
         <jsp:setProperty name="user" property="*" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
         <link href="resources/style.css" rel="stylesheet" type="text/css">
         <%if (user.getId() == null) {%>
-        <title>Pariuri SC:GO</title>
+        <title>Pariuri CS:GO</title>
         <%} else {%>
-        <title>Pariuri SC:GO ${user.username}</title>
+        <title>Pariuri CS:GO ${user.username}</title>
         <%}%>
     </head>
     <body>

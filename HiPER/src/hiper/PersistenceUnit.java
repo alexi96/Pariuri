@@ -201,6 +201,7 @@ public class PersistenceUnit {
         }
     }
 
+    @Deprecated
     public int lastId() throws SQLException {
         ResultSet res = this.statement.executeQuery("SElect LAST_INSERT_ID() from dual");
         if (res.next()) {

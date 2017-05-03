@@ -7,6 +7,8 @@ public class StatisticType implements Serializable, Comparable<StatisticType> {
     protected Integer id;
     protected String name;
     protected float deviation;
+    protected float mediumPay;
+    protected float farPay;
 
     public StatisticType() {
     }
@@ -15,15 +17,19 @@ public class StatisticType implements Serializable, Comparable<StatisticType> {
         this.id = id;
     }
 
-    public StatisticType(String name, float deviation) {
+    public StatisticType(String name, float deviation, float mediumPay, float farPay) {
         this.name = name;
         this.deviation = deviation;
+        this.mediumPay = mediumPay;
+        this.farPay = farPay;
     }
 
-    public StatisticType(Integer id, String name, float deviation) {
+    public StatisticType(Integer id, String name, float deviation, float mediumPay, float farPay) {
         this.id = id;
         this.name = name;
         this.deviation = deviation;
+        this.mediumPay = mediumPay;
+        this.farPay = farPay;
     }
 
     public Integer getId() {
@@ -48,6 +54,22 @@ public class StatisticType implements Serializable, Comparable<StatisticType> {
 
     public void setDeviation(float deviation) {
         this.deviation = deviation;
+    }
+
+    public float getMediumPay() {
+        return mediumPay;
+    }
+
+    public void setMediumPay(float mediumPay) {
+        this.mediumPay = mediumPay;
+    }
+
+    public float getFarPay() {
+        return farPay;
+    }
+
+    public void setFarPay(float farPay) {
+        this.farPay = farPay;
     }
 
     @Override

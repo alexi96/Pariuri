@@ -15,18 +15,31 @@ public class StatisticTypeDB implements Serializable, Comparable<StatisticTypeDB
     protected String name;
     @HiperField
     protected float deviation;
+    @HiperField("medium_pay")
+    protected float mediumPay;
+    @HiperField("far_pay")
+    protected float farPay;
 
     public StatisticTypeDB() {
     }
 
-    public StatisticTypeDB(String name) {
-        this.name = name;
+    public StatisticTypeDB(Integer id) {
+        this.id = id;
     }
 
-    public StatisticTypeDB(Integer id, String name, float deviation) {
+    public StatisticTypeDB(String name, float deviation, float mediumPay, float farPay) {
+        this.name = name;
+        this.deviation = deviation;
+        this.mediumPay = mediumPay;
+        this.farPay = farPay;
+    }
+
+    public StatisticTypeDB(Integer id, String name, float deviation, float mediumPay, float farPay) {
         this.id = id;
         this.name = name;
         this.deviation = deviation;
+        this.mediumPay = mediumPay;
+        this.farPay = farPay;
     }
 
     public Integer getId() {
@@ -51,6 +64,22 @@ public class StatisticTypeDB implements Serializable, Comparable<StatisticTypeDB
 
     public void setDeviation(float deviation) {
         this.deviation = deviation;
+    }
+
+    public float getMediumPay() {
+        return mediumPay;
+    }
+
+    public void setMediumPay(float mediumPay) {
+        this.mediumPay = mediumPay;
+    }
+
+    public float getFarPay() {
+        return farPay;
+    }
+
+    public void setFarPay(float farPay) {
+        this.farPay = farPay;
     }
 
     @Override

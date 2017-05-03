@@ -59,4 +59,6 @@ public interface Connection {
     ArrayList<Result> findResults(Game g);
 
     TreeMap<Ticket, Float> validateTicket(int id);
+    
+    void forgotPassword(String username, String email);
 }

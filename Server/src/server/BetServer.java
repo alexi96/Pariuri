@@ -132,11 +132,17 @@ public class BetServer implements Connection {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 
             message.setSubject("CS GO Betting");
-            message.setContent("Merge?\n<h1 style=\"color: red\">Bun venit la CS GO Betting!</h1>\n"
+            message.setContent("<h1 style=\"color: red\">Bun venit la CS GO Betting!</h1>\n"
                     + "<p>Contul dumneavoastra a fost creeat!</p>", "text/html");
 
-            Transport.send(message);
-            System.out.println("sent");
+            new Thread(() -> {
+                try {
+                    Transport.send(message);
+                    System.out.println("sent");
+                } catch (MessagingException ex) {
+                    Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }).start();
         } catch (MessagingException e) {
             return false;
         }
@@ -199,6 +205,10 @@ public class BetServer implements Connection {
             q.parameter("game", "" + g.getId());
             List<PlaysDB> ps = this.pu.select(q);
 
+            if (ps.isEmpty()) {
+                return null;
+            }
+            
             Team[] res = new Team[2];
 
             TeamDB t = this.pu.select(TeamDB.class, ps.get(0).getTeam());
@@ -270,12 +280,7 @@ public class BetServer implements Connection {
 
         try {
             this.pu.create(t);
-
-            QueryBy<GameDB> q = new QueryBy<>(GameDB.class);
-            q.parameter("date", EntityManager.getDatabaseFormat().format(t.getDate()));
-            q.parameter("name", t.getName());
-
-            t = this.pu.select(q).get(0);
+            t.setId(this.pu.lastId());
 
             pa.setGame(t.getId());
             pb.setGame(t.getId());
@@ -345,7 +350,7 @@ public class BetServer implements Connection {
                     return null;
                 }
             }
-            */
+             */
             ComposedTicketDB ct = new ComposedTicketDB(user.getId(), new Date(), false);
 
             this.pu.create(ct);
@@ -460,26 +465,92 @@ public class BetServer implements Connection {
             for (Ticket t : ts) {
                 type = this.findStatisticType(t.getType());
                 r = this.findResult(new Game(t.getGame()), type);
-                
+
                 if (r == null) {
                     return null;
                 }
-                
-                float multy = 1 - (float) t.getOperation() / 3f;
+
+                float multy;
+                switch (t.getOperation()) {
+                    case 1:
+                        multy = type.getMediumPay();
+                        break;
+                    case 2:
+                        multy = type.getFarPay();
+                        break;
+                    default:
+                        multy = 1;
+                        break;
+                }
+
                 if (this.ticketWon(t, r, type)) {
                     res.put(t, multy * t.getAmmount());
                 } else {
                     res.put(t, 0f);
                 }
             }
-            
+
             ct.setValidated(true);
             this.pu.edit(ct);
-            
+
             return res;
         } catch (IllegalArgumentException | SQLException ex) {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public void forgotPassword(String username, String email) {
+        try {
+            QueryBy<UserDB> byUsername = new QueryBy<>(UserDB.class);
+            byUsername.parameter("username", username);
+            byUsername.parameter("email", email);
+            List<UserDB> res = this.pu.select(byUsername);
+            if (res.isEmpty()) {
+                return;
+            }
+
+            UserDB t = res.get(0);
+
+            String to = t.getEmail();
+            String host = "smtp.gmail.com";
+            final String usn = "betting231@gmail.com";
+            final String password = "bettingproiect";
+
+            Properties props = new Properties();
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.ssl.trust", host);
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.host", host);
+            props.put("mail.smtp.port", "587");
+
+            Session session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(usn, password);
+                }
+            });
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(usn));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+
+            message.setSubject("Recuperare parola CS GO Betting");
+            message.setContent("<h1 style=\"color: red\">Recuperare parola CS GO Betting!</h1>\n"
+                    + "<p>Parola dumneavoastra este " + t.getPassword() + "</p>"
+                    + "<p>Fii mai atent!</p>", "text/html");
+
+            new Thread(() -> {
+                try {
+                    Transport.send(message);
+                    System.out.println("sent");
+                } catch (MessagingException ex) {
+                    Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }).start();
+        } catch (IllegalArgumentException | SQLException | MessagingException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
