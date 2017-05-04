@@ -12,8 +12,6 @@ public class TicketDB implements Serializable {
     @HiperField
     protected Integer id;
     @HiperField
-    protected float ammount;
-    @HiperField
     protected float value;
     @HiperField
     protected byte operation;
@@ -31,8 +29,7 @@ public class TicketDB implements Serializable {
         this.id = id;
     }
 
-    public TicketDB(float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
-        this.ammount = ammount;
+    public TicketDB(float value, byte operation, Integer game, Integer composedTicket, Integer type) {
         this.value = value;
         this.operation = operation;
         this.game = game;
@@ -40,9 +37,8 @@ public class TicketDB implements Serializable {
         this.type = type;
     }
 
-    public TicketDB(Integer id, float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
+    public TicketDB(Integer id, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
         this.id = id;
-        this.ammount = ammount;
         this.value = value;
         this.operation = operation;
         this.game = game;
@@ -56,14 +52,6 @@ public class TicketDB implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public float getAmmount() {
-        return ammount;
-    }
-
-    public void setAmmount(float ammount) {
-        this.ammount = ammount;
     }
 
     public float getValue() {

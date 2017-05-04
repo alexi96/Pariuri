@@ -1,3 +1,4 @@
+<%@page import="model.ComposedTicket"%>
 <%@page import="model.Ticket"%>
 <%@page import="model.User"%>
 <%@page import="controllers.MainController"%>
@@ -10,9 +11,13 @@
         <jsp:setProperty name="user" property="*" />
         <jsp:useBean id="conposedTicket" class="web.WebConposedTicket" scope="session"/>
         <jsp:setProperty name="conposedTicket" property="user" param="user" />
+        <jsp:setProperty name="conposedTicket" property="ammount" param="ammount" />
         <%
             Connection con = MainController.getInstance().getConnection();
-            Integer ticketId = con.createComposedTiket(new User(user.getId()), conposedTicket.getTickets());
+            ComposedTicket ct = new ComposedTicket();
+            ct.setUser(user.getId());
+            ct.setAmmount(conposedTicket.getAmmount());
+            Integer ticketId = con.createComposedTicket(ct, conposedTicket.getTickets());
 
             boolean succ = ticketId != null;
         %>
@@ -24,12 +29,14 @@
         <%}%>
     </head>
     <body>
-        <h1>Ticket <%=ticketId%> created for ${user.username}</h1> 
         <%
             if (succ) {
-                for (Ticket t : conposedTicket.getTickets()) {
         %>
-        <p><%=t.getAmmount()%> <%=t.getValue()%> <%=con.findGame(t.getGame()).getName()%> <%=con.findStatisticType(t.getType()).getName()%> <%=t.getOperation()%></p>
+        <h1>${conposedTicket.ammount}$ ticket <%=ticketId%> created for ${user.username}</h1> 
+        <%
+            for (Ticket t : conposedTicket.getTickets()) {
+        %>
+        <p><%=t.getValue()%> <%=con.findGame(t.getGame()).getName()%> <%=con.findStatisticType(t.getType()).getName()%> <%=t.getOperation()%></p>
         <%
             }
             conposedTicket.getTickets().clear();

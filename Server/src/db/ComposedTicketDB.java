@@ -13,6 +13,8 @@ public class ComposedTicketDB implements Serializable {
     @HiperField
     protected Integer id;
     @HiperField
+    protected float ammount;
+    @HiperField
     protected Integer user;
     @HiperField
     protected Date time;
@@ -26,14 +28,16 @@ public class ComposedTicketDB implements Serializable {
         this.id = id;
     }
 
-    public ComposedTicketDB(Integer user, Date time, boolean validated) {
+    public ComposedTicketDB(float ammount, Integer user, Date time, boolean validated) {
+        this.ammount = ammount;
         this.user = user;
         this.time = time;
         this.validated = validated;
     }
 
-    public ComposedTicketDB(Integer id, Integer user, Date time, boolean validated) {
+    public ComposedTicketDB(Integer id, float ammount, Integer user, Date time, boolean validated) {
         this.id = id;
+        this.ammount = ammount;
         this.user = user;
         this.time = time;
         this.validated = validated;
@@ -45,6 +49,14 @@ public class ComposedTicketDB implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public float getAmmount() {
+        return ammount;
+    }
+
+    public void setAmmount(float ammount) {
+        this.ammount = ammount;
     }
 
     public Integer getUser() {

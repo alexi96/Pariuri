@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class Ticket implements Serializable, Comparable<Ticket> {
 
     protected Integer id;
-    protected float ammount;
     protected float value;
     protected byte operation;
     protected Integer game;
@@ -19,8 +18,7 @@ public class Ticket implements Serializable, Comparable<Ticket> {
         this.id = id;
     }
 
-    public Ticket(float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
-        this.ammount = ammount;
+    public Ticket(float value, byte operation, Integer game, Integer composedTicket, Integer type) {
         this.value = value;
         this.operation = operation;
         this.game = game;
@@ -28,9 +26,8 @@ public class Ticket implements Serializable, Comparable<Ticket> {
         this.type = type;
     }
 
-    public Ticket(Integer id, float ammount, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
+    public Ticket(Integer id, float value, byte operation, Integer game, Integer composedTicket, Integer type) {
         this.id = id;
-        this.ammount = ammount;
         this.value = value;
         this.operation = operation;
         this.game = game;
@@ -44,14 +41,6 @@ public class Ticket implements Serializable, Comparable<Ticket> {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public float getAmmount() {
-        return ammount;
-    }
-
-    public void setAmmount(float ammount) {
-        this.ammount = ammount;
     }
 
     public float getValue() {

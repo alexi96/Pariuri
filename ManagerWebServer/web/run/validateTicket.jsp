@@ -12,7 +12,7 @@
         <jsp:setProperty name="ticket" property="id" param="ticketId" />
         <%
             Connection con = MainController.getInstance().getConnection();
-            Map<Ticket, Float> winnings = con.validateTicket(ticket.getId());
+            Float winnings = con.validateTicket(ticket.getId());
             boolean succ = winnings != null;
         %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,22 +25,9 @@
     <body>
         <%if (succ) {%>
         <h1>Ticket ${ticket.id} validated!</h1>
-        <%
-            Collection<Float> ws = winnings.values();
-            float sum = 0;
-            for (Float w : ws) {
-                sum += w;
-            }
-        %>
-        <p>You won <%=sum%>$</p>
-        <%
-            Set<Ticket> ts = winnings.keySet();
-            for (Ticket t : ts) {
-        %>
         <p>
-            <%=t.getId()%>: <%=winnings.get(t)%>
+            You won <%=winnings%>$!
         </p>
-        <%}%>
         <%} else {%>
         <h1>Error validating ticket!</h1>
         <%}%>

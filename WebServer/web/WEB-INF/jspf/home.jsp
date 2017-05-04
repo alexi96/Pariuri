@@ -22,12 +22,12 @@
             Set<ComposedTicket> all = con.findComposedTickets(new User(user.getId()));
             for (ComposedTicket ct : all) {
         %>
-        <h2><%=ct.getId()%> <%=ct.getTime()%></h2>
+        <h2><%=ct%></h2>
         <p>
             <%
                 List<Ticket> ts = con.findTickets(ct);
                 for (Ticket t : ts) {
-                    out.println(t.getId() + " " + t.getAmmount() + " " + t.getValue() + " " + con.findGame(t.getGame()).getName() + " " + t.getOperation() + " " + con.findStatisticType(t.getType()).getName());
+                    out.println(t.getId() + " " + t.getValue() + " " + con.findGame(t.getGame()).getName() + " " + t.getOperation() + " " + con.findStatisticType(t.getType()).getName());
                 }
             %>
         </p>

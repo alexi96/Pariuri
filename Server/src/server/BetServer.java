@@ -10,7 +10,6 @@ import db.GameDB;
 import db.ResultDB;
 import db.PlaysDB;
 import db.TicketDB;
-import hiper.EntityManager;
 import hiper.PersistenceUnit;
 import hiper.QueryBy;
 import java.sql.SQLException;
@@ -342,16 +341,9 @@ public class BetServer implements Connection {
     }
 
     @Override
-    public Integer createComposedTiket(User user, Collection<Ticket> simpleTickets) {
+    public Integer createComposedTicket(ComposedTicket ticket, Collection<Ticket> simpleTickets) {
         try {
-            /*for (Ticket sts : simpleTickets) {
-                Result r = this.findResult(new Game(sts.getGame()), new StatisticType(1));
-                if (r != null) {
-                    return null;
-                }
-            }
-             */
-            ComposedTicketDB ct = new ComposedTicketDB(user.getId(), new Date(), false);
+            ComposedTicketDB ct = new ComposedTicketDB(ticket.getAmmount(), ticket.getUser(), new Date(), false);
 
             this.pu.create(ct);
             int ctu = this.pu.lastId();
@@ -448,7 +440,7 @@ public class BetServer implements Connection {
     }
 
     @Override
-    public TreeMap<Ticket, Float> validateTicket(int id) {
+    public Float validateTicket(int id) {
         try {
             ComposedTicketDB ct = this.pu.select(ComposedTicketDB.class, id);
 
@@ -457,7 +449,7 @@ public class BetServer implements Connection {
             }
 
             List<Ticket> ts = this.findTickets(new ComposedTicket(id));
-            TreeMap<Ticket, Float> res = new TreeMap<>();
+            float res = ct.getAmmount();
 
             StatisticType type;
             Result r;
@@ -473,20 +465,21 @@ public class BetServer implements Connection {
                 float multy;
                 switch (t.getOperation()) {
                     case 1:
-                        multy = type.getMediumPay();
+                        multy = type.getMediumMultiply();
                         break;
                     case 2:
-                        multy = type.getFarPay();
+                        multy = type.getFarMultiply();
                         break;
                     default:
-                        multy = 1;
+                        multy = type.getExactMultiply();
                         break;
                 }
 
                 if (this.ticketWon(t, r, type)) {
-                    res.put(t, multy * t.getAmmount());
+                    res *= multy;
                 } else {
-                    res.put(t, 0f);
+                    res = 0f;
+                    break;
                 }
             }
 

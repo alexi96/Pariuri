@@ -7,8 +7,9 @@ public class StatisticType implements Serializable, Comparable<StatisticType> {
     protected Integer id;
     protected String name;
     protected float deviation;
-    protected float mediumPay;
-    protected float farPay;
+    protected float exactMultiply;
+    protected float mediumMultiply;
+    protected float farMultiply;
 
     public StatisticType() {
     }
@@ -17,19 +18,21 @@ public class StatisticType implements Serializable, Comparable<StatisticType> {
         this.id = id;
     }
 
-    public StatisticType(String name, float deviation, float mediumPay, float farPay) {
+    public StatisticType(String name, float deviation, float exactMultiply, float mediumMultiply, float farMultiply) {
         this.name = name;
         this.deviation = deviation;
-        this.mediumPay = mediumPay;
-        this.farPay = farPay;
+        this.exactMultiply = exactMultiply;
+        this.mediumMultiply = mediumMultiply;
+        this.farMultiply = farMultiply;
     }
 
-    public StatisticType(Integer id, String name, float deviation, float mediumPay, float farPay) {
+    public StatisticType(Integer id, String name, float deviation, float exactMultiply, float mediumMultiply, float farMultiply) {
         this.id = id;
         this.name = name;
         this.deviation = deviation;
-        this.mediumPay = mediumPay;
-        this.farPay = farPay;
+        this.exactMultiply = exactMultiply;
+        this.mediumMultiply = mediumMultiply;
+        this.farMultiply = farMultiply;
     }
 
     public Integer getId() {
@@ -56,20 +59,28 @@ public class StatisticType implements Serializable, Comparable<StatisticType> {
         this.deviation = deviation;
     }
 
-    public float getMediumPay() {
-        return mediumPay;
+    public float getExactMultiply() {
+        return exactMultiply;
     }
 
-    public void setMediumPay(float mediumPay) {
-        this.mediumPay = mediumPay;
+    public void setExactMultiply(float exactMultiply) {
+        this.exactMultiply = exactMultiply;
     }
 
-    public float getFarPay() {
-        return farPay;
+    public float getMediumMultiply() {
+        return mediumMultiply;
     }
 
-    public void setFarPay(float farPay) {
-        this.farPay = farPay;
+    public void setMediumMultiply(float mediumMultiply) {
+        this.mediumMultiply = mediumMultiply;
+    }
+
+    public float getFarMultiply() {
+        return farMultiply;
+    }
+
+    public void setFarMultiply(float farMultiply) {
+        this.farMultiply = farMultiply;
     }
 
     @Override

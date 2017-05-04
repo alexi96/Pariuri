@@ -12,6 +12,7 @@
     <head>
         <jsp:useBean id="conposedTicket" class="web.WebConposedTicket" scope="session"/>
         <jsp:setProperty name="conposedTicket" property="user" param="user" />
+        <jsp:setProperty name="conposedTicket" property="ammount" param="ammount" />
         <jsp:useBean id="ticket" class="model.Ticket" scope="request"/>
         <jsp:setProperty name="ticket" property="*" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -22,23 +23,32 @@
         <%
             Connection con = MainController.getInstance().getConnection();
 
+            List<Game> allGm = con.findFutureGames();
+            List<StatisticType> allSt = con.findStatisticTypes();
+
+            if (allGm.isEmpty()) {
+        %>
+        <h1>
+            No games available!
+        </h1>
+        <%
+        } else {
             if (ticket.getGame() != null) {
                 Ticket t = Conversion.model(ticket, Ticket.class);
                 conposedTicket.getTickets().add(t);
             }
+
             for (Ticket t : conposedTicket.getTickets()) {
+                StatisticType st = con.findStatisticType(t.getType());
         %>
-        <p><%=t.getAmmount()%> <%=t.getValue()%> <%=con.findGame(t.getGame()).getName()%> <%=con.findStatisticType(t.getType()).getName()%> <%=t.getOperation()%></p>
+        <p><%=t.getValue()%> <%=con.findGame(t.getGame()).getName()%> <%=st.getName()%> <%=t.getOperation()%></p>
         <%}%>
         <form method="post">
-            <label for="ammount">Ammount:</label>
-            <input id="ammount" type="number" name="ammount" />
             <label for="value">Value:</label>
             <input id="value" type="number" name="value" />
             <label for="type">Bet type:</label>
             <select id="type" name="type">
                 <%
-                    List<StatisticType> allSt = con.findStatisticTypes();
                     for (StatisticType t : allSt) {
                 %>
                 <option value="<%=t.getId()%>"><%=t.getName()%></option>
@@ -47,7 +57,6 @@
             <label for="game">Game:</label>
             <select id="game" name="game">
                 <%
-                    List<Game> allGm = con.findFutureGames();
                     for (Game t : allGm) {
                         Team[] ts = con.findTeams(t);
                 %>
@@ -63,15 +72,20 @@
             <input type="submit" value="Add simple ticket" />
         </form>
         <form action="${pageContext.request.contextPath}/run/createTicket.jsp" method="post">
+            <label for="ammount">Ammount:</label>
+            <input id="ammount" type="number" name="ammount" />
             <input type="submit" value="Done" />
         </form>
+        <%
+            }
+        %>
         <form action="${pageContext.request.contextPath}/index.jsp" method="post" >
             <span>
                 <input type="submit" value="Cancel" class="cancelbtn"/>
             </span>
         </form>
-        <table>
-             <caption>Betting rules</caption>
+        <table id="bettingRules">
+            <caption>Betting rules</caption>
             <thead>
                 <tr>
                     <td>
@@ -106,7 +120,7 @@
                     for (StatisticType t : allSt) {
                 %>
                 <td>
-                    100%
+                    <%=100f * t.getExactMultiply()%>%
                 </td>
                 <%}%>
             </tr>
@@ -118,7 +132,7 @@
                     for (StatisticType t : allSt) {
                 %>
                 <td>
-                    <%=t.getMediumPay() * 100f%>%
+                    <%=t.getMediumMultiply() * 100f%>%
                 </td>
                 <%}%>
             </tr>
@@ -130,7 +144,7 @@
                     for (StatisticType t : allSt) {
                 %>
                 <td>
-                    <%=t.getFarPay() * 100f%>%
+                    <%=t.getFarMultiply() * 100f%>%
                 </td>
                 <%}%>
             </tr>

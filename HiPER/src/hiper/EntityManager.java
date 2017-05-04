@@ -16,28 +16,28 @@ import java.util.Set;
 
 public class EntityManager<E> {
 
-    private static final HashMap<Class, ToQl> TO_QLS = new HashMap<>();
-    private static final HashMap<Class, FromQl> FROM_QLS = new HashMap<>();
+    private static final HashMap<Class, ToQl> TO_SQL = new HashMap<>();
+    private static final HashMap<Class, FromQl> FROM_SQL = new HashMap<>();
     private static final SimpleDateFormat DATABASE_FORMAT = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 
     static {
-        EntityManager.TO_QLS.put(String.class, (v) -> "'" + v + "'");
+        EntityManager.TO_SQL.put(String.class, (v) -> "'" + v + "'");
         ToQl simple = (v) -> "" + v;
-        EntityManager.TO_QLS.put(Boolean.class, simple);
-        EntityManager.TO_QLS.put(boolean.class, simple);
-        EntityManager.TO_QLS.put(Long.class, simple);
-        EntityManager.TO_QLS.put(long.class, simple);
-        EntityManager.TO_QLS.put(Integer.class, simple);
-        EntityManager.TO_QLS.put(int.class, simple);
-        EntityManager.TO_QLS.put(Short.class, simple);
-        EntityManager.TO_QLS.put(short.class, simple);
-        EntityManager.TO_QLS.put(Byte.class, simple);
-        EntityManager.TO_QLS.put(byte.class, simple);
-        EntityManager.TO_QLS.put(Float.class, simple);
-        EntityManager.TO_QLS.put(float.class, simple);
-        EntityManager.TO_QLS.put(Double.class, simple);
-        EntityManager.TO_QLS.put(double.class, simple);
-        EntityManager.TO_QLS.put(Date.class, (v) -> {
+        EntityManager.TO_SQL.put(Boolean.class, simple);
+        EntityManager.TO_SQL.put(boolean.class, simple);
+        EntityManager.TO_SQL.put(Long.class, simple);
+        EntityManager.TO_SQL.put(long.class, simple);
+        EntityManager.TO_SQL.put(Integer.class, simple);
+        EntityManager.TO_SQL.put(int.class, simple);
+        EntityManager.TO_SQL.put(Short.class, simple);
+        EntityManager.TO_SQL.put(short.class, simple);
+        EntityManager.TO_SQL.put(Byte.class, simple);
+        EntityManager.TO_SQL.put(byte.class, simple);
+        EntityManager.TO_SQL.put(Float.class, simple);
+        EntityManager.TO_SQL.put(float.class, simple);
+        EntityManager.TO_SQL.put(Double.class, simple);
+        EntityManager.TO_SQL.put(double.class, simple);
+        EntityManager.TO_SQL.put(Date.class, (v) -> {
             if (v instanceof Date) {
                 return "'" + DATABASE_FORMAT.format(v) + "'";
             } else {
@@ -45,22 +45,22 @@ public class EntityManager<E> {
             }
         });
 
-        EntityManager.FROM_QLS.put(String.class, (r, f) -> r.getString(f));
-        EntityManager.FROM_QLS.put(Boolean.class, (r, f) -> r.getBoolean(f));
-        EntityManager.FROM_QLS.put(boolean.class, (r, f) -> r.getBoolean(f));
-        EntityManager.FROM_QLS.put(Long.class, (r, f) -> r.getLong(f));
-        EntityManager.FROM_QLS.put(long.class, (r, f) -> r.getLong(f));
-        EntityManager.FROM_QLS.put(Integer.class, (r, f) -> r.getInt(f));
-        EntityManager.FROM_QLS.put(int.class, (r, f) -> r.getInt(f));
-        EntityManager.FROM_QLS.put(Short.class, (r, f) -> r.getShort(f));
-        EntityManager.FROM_QLS.put(short.class, (r, f) -> r.getShort(f));
-        EntityManager.FROM_QLS.put(Byte.class, (r, f) -> r.getByte(f));
-        EntityManager.FROM_QLS.put(byte.class, (r, f) -> r.getByte(f));
-        EntityManager.FROM_QLS.put(Float.class, (r, f) -> r.getFloat(f));
-        EntityManager.FROM_QLS.put(float.class, (r, f) -> r.getFloat(f));
-        EntityManager.FROM_QLS.put(Double.class, (r, f) -> r.getDouble(f));
-        EntityManager.FROM_QLS.put(double.class, (r, f) -> r.getDouble(f));
-        EntityManager.FROM_QLS.put(Date.class, (r, f) -> r.getDate(f));
+        EntityManager.FROM_SQL.put(String.class, (r, f) -> r.getString(f));
+        EntityManager.FROM_SQL.put(Boolean.class, (r, f) -> r.getBoolean(f));
+        EntityManager.FROM_SQL.put(boolean.class, (r, f) -> r.getBoolean(f));
+        EntityManager.FROM_SQL.put(Long.class, (r, f) -> r.getLong(f));
+        EntityManager.FROM_SQL.put(long.class, (r, f) -> r.getLong(f));
+        EntityManager.FROM_SQL.put(Integer.class, (r, f) -> r.getInt(f));
+        EntityManager.FROM_SQL.put(int.class, (r, f) -> r.getInt(f));
+        EntityManager.FROM_SQL.put(Short.class, (r, f) -> r.getShort(f));
+        EntityManager.FROM_SQL.put(short.class, (r, f) -> r.getShort(f));
+        EntityManager.FROM_SQL.put(Byte.class, (r, f) -> r.getByte(f));
+        EntityManager.FROM_SQL.put(byte.class, (r, f) -> r.getByte(f));
+        EntityManager.FROM_SQL.put(Float.class, (r, f) -> r.getFloat(f));
+        EntityManager.FROM_SQL.put(float.class, (r, f) -> r.getFloat(f));
+        EntityManager.FROM_SQL.put(Double.class, (r, f) -> r.getDouble(f));
+        EntityManager.FROM_SQL.put(double.class, (r, f) -> r.getDouble(f));
+        EntityManager.FROM_SQL.put(Date.class, (r, f) -> r.getTime(f));
     }
 
     private Class<E> clazz;
@@ -135,7 +135,7 @@ public class EntityManager<E> {
         ql.append(") values (");
 
         for (Field f : fs) {
-            ToQl bds = EntityManager.TO_QLS.get(f.getType());
+            ToQl bds = EntityManager.TO_SQL.get(f.getType());
             f.setAccessible(true);
             ql.append(bds.value(f.get(bean)));
             ql.append(",");
@@ -155,7 +155,7 @@ public class EntityManager<E> {
             ql.append("`");
             ql.append(this.fields.get(f));
             ql.append("`=");
-            ToQl bds = EntityManager.TO_QLS.get(f.getType());
+            ToQl bds = EntityManager.TO_SQL.get(f.getType());
             f.setAccessible(true);
             ql.append(bds.value(f.get(bean)));
             ql.append(",");
@@ -175,7 +175,7 @@ public class EntityManager<E> {
             ql.append("`");
             ql.append(this.fields.get(f));
             ql.append("`=");
-            ToQl bds = EntityManager.TO_QLS.get(f.getType());
+            ToQl bds = EntityManager.TO_SQL.get(f.getType());
             f.setAccessible(true);
             ql.append(bds.value(f.get(bean)));
             ql.append(",");
@@ -190,7 +190,7 @@ public class EntityManager<E> {
             ql.append("`");
             ql.append(this.fields.get(f));
             ql.append("`=");
-            ToQl bds = EntityManager.TO_QLS.get(f.getType());
+            ToQl bds = EntityManager.TO_SQL.get(f.getType());
             f.setAccessible(true);
             ql.append(bds.value(f.get(bean)));
             ql.append(",");
@@ -219,7 +219,7 @@ public class EntityManager<E> {
             ql.append(this.fields.get(k));
             ql.append("`=");
 
-            ToQl bds = EntityManager.TO_QLS.get(k.getType());//Not in this context
+            ToQl bds = EntityManager.TO_SQL.get(k.getType());//Not in this context
             ql.append(bds.value(ids[index]));
             ql.append(" and ");
 
@@ -249,7 +249,7 @@ public class EntityManager<E> {
             ql.append(this.fields.get(f));
             ql.append("`=");
 
-            ToQl bds = EntityManager.TO_QLS.get(f.getType());
+            ToQl bds = EntityManager.TO_SQL.get(f.getType());
             ql.append(bds.value(q.values.get(fstr)));
             ql.append(" and ");
         });
@@ -262,7 +262,7 @@ public class EntityManager<E> {
         Collection<Field> fs = this.fields.keySet();
 
         for (Field f : fs) {
-            FromQl ql = EntityManager.FROM_QLS.get(f.getType());
+            FromQl ql = EntityManager.FROM_SQL.get(f.getType());
             f.setAccessible(true);
             f.set(e, ql.value(res, this.fields.get(f)));
         }

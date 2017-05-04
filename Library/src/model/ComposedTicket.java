@@ -9,6 +9,7 @@ public class ComposedTicket implements Serializable, Comparable<ComposedTicket> 
     private static final SimpleDateFormat FORMETTER = new SimpleDateFormat("dd-MM-YYYY HH:mm");
 
     protected Integer id;
+    protected float ammount;
     protected Integer user;
     protected Date time;
     protected boolean validated;
@@ -20,14 +21,16 @@ public class ComposedTicket implements Serializable, Comparable<ComposedTicket> 
         this.id = id;
     }
 
-    public ComposedTicket(Integer user, Date time, boolean validated) {
+    public ComposedTicket(float ammount, Integer user, Date time, boolean validated) {
+        this.ammount = ammount;
         this.user = user;
         this.time = time;
         this.validated = validated;
     }
 
-    public ComposedTicket(Integer id, Integer user, Date time, boolean validated) {
+    public ComposedTicket(Integer id, float ammount, Integer user, Date time, boolean validated) {
         this.id = id;
+        this.ammount = ammount;
         this.user = user;
         this.time = time;
         this.validated = validated;
@@ -39,6 +42,14 @@ public class ComposedTicket implements Serializable, Comparable<ComposedTicket> 
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public float getAmmount() {
+        return ammount;
+    }
+
+    public void setAmmount(float ammount) {
+        this.ammount = ammount;
     }
 
     public Integer getUser() {
@@ -72,6 +83,6 @@ public class ComposedTicket implements Serializable, Comparable<ComposedTicket> 
 
     @Override
     public String toString() {
-        return this.id + " " + ComposedTicket.FORMETTER.format(this.time);
+        return this.id + " " + this.ammount + "$ " + ComposedTicket.FORMETTER.format(this.time);
     }
 }
