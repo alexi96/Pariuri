@@ -13,6 +13,8 @@ public class ExecutionEndPoint implements Runnable {
 
     private Socket socket;
     private Object procedures;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
     public ExecutionEndPoint() {
     }
@@ -38,14 +40,14 @@ public class ExecutionEndPoint implements Runnable {
         this.procedures = procedures;
     }
 
-    private void invocation(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    private void invocation() throws IOException {
         try {
-            RemoteInvocation inv = (RemoteInvocation) in.readObject();
+            RemoteInvocation inv = (RemoteInvocation) this.in.readObject();
 
             Method m = this.procedures.getClass().getMethod(inv.getMethod(), inv.getParamsTypes());
             Object res = m.invoke(this.procedures, (Object[]) inv.getParams());
             if (!Void.TYPE.equals(m.getReturnType())) {
-                out.writeObject(res);
+                this.out.writeObject(res);
             }
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(HiRpc.class.getName()).log(Level.SEVERE, null, ex);
@@ -55,11 +57,11 @@ public class ExecutionEndPoint implements Runnable {
     @Override
     public void run() {
         try {
-            ObjectInputStream in = new ObjectInputStream(this.socket.getInputStream());
-            ObjectOutputStream out = new ObjectOutputStream(this.socket.getOutputStream());
+            this.in = new ObjectInputStream(this.socket.getInputStream());
+            this.out = new ObjectOutputStream(this.socket.getOutputStream());
 
             while (true) {
-                this.invocation(in, out);
+                this.invocation();
             }
         } catch (IOException ex) {
         } finally {
