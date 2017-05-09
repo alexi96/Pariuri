@@ -7,6 +7,7 @@
     </div>
     <form action="${pageContext.request.contextPath}/run/log" method="post" >
         <div class="container">
+            <p style="color: red"><%=user.isError() ? "Invalid username or password!" : ""%></p>
             Username: <input type="text" name="username" required />
             Password: <input type="password" name="password" required />
             <input type="submit" value="Login"/>

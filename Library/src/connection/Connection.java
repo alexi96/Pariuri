@@ -50,6 +50,8 @@ public interface Connection {
 
     Integer createComposedTicket(ComposedTicket tiket, Collection<Ticket> simpleTickets);
 
+    TreeSet<ComposedTicket> findComposedTickets(User u, Boolean validated);
+
     TreeSet<ComposedTicket> findComposedTickets(User u);
 
     ArrayList<Ticket> findTickets(ComposedTicket ct);
@@ -59,6 +61,6 @@ public interface Connection {
     ArrayList<Result> findResults(Game g);
 
     Float validateTicket(int id);
-    
+
     void forgotPassword(String username, String email);
 }

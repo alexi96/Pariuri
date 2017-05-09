@@ -7,6 +7,7 @@ import model.User;
 public class WebUser extends User {
 
     private final Connection mainController = MainController.getInstance().getConnection();
+    private boolean error;
 
     public WebUser() {
     }
@@ -23,10 +24,14 @@ public class WebUser extends User {
         super(username, password, firstName, lastName, email);
     }
 
+    public boolean isError() {
+        return error;
+    }
+
     public boolean log() {
         return this.log(this.username, this.password);
     }
-    
+
     public void logOut() {
         User u = new User();
         super.id = u.getId();
@@ -41,6 +46,7 @@ public class WebUser extends User {
         User u = this.mainController.log(user, pass);
 
         if (u == null) {
+            this.error = true;
             return false;
         }
 
@@ -50,6 +56,7 @@ public class WebUser extends User {
         super.firstName = u.getFirstName();
         super.lastName = u.getLastName();
         this.email = u.getEmail();
+        this.error = false;
         return true;
     }
 

@@ -207,7 +207,7 @@ public class BetServer implements Connection {
             if (ps.isEmpty()) {
                 return null;
             }
-            
+
             Team[] res = new Team[2];
 
             TeamDB t = this.pu.select(TeamDB.class, ps.get(0).getTeam());
@@ -363,10 +363,17 @@ public class BetServer implements Connection {
 
     @Override
     public TreeSet<ComposedTicket> findComposedTickets(User u) {
+        return this.findComposedTickets(u, null);
+    }
+
+    @Override
+    public TreeSet<ComposedTicket> findComposedTickets(User u, Boolean validated) {
         try {
             QueryBy q = new QueryBy(ComposedTicketDB.class);
             q.parameter("user", "" + u.getId());
-            q.parameter("validated", "false");
+            if (validated != null) {
+                q.parameter("validated", "" + validated);
+            }
 
             TreeSet<ComposedTicket> res = new TreeSet<>();
             List<ComposedTicketDB> ts = this.pu.select(q);

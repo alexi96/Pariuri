@@ -21,8 +21,9 @@
             Connection con = MainController.getInstance().getConnection();
             Set<ComposedTicket> all = con.findComposedTickets(new User(user.getId()));
             for (ComposedTicket ct : all) {
+                String style = "background-color: " + (ct.isValidated() ? "green" : "black");
         %>
-        <h2><%=ct%></h2>
+        <h2 style="<%=style%>"><%=ct%></h2>
         <p>
             <%
                 List<Ticket> ts = con.findTickets(ct);
