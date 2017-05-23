@@ -9,6 +9,11 @@ public class QueryBy<E> {
     protected Class<E> clazz;
     protected final LinkedHashMap<String, String> values = new LinkedHashMap<>();
 
+    protected Object clone() {
+        return null;
+    }
+    
+    
     public QueryBy() {
     }
 

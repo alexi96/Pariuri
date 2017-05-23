@@ -60,7 +60,7 @@ public class EntityManager<E> {
         EntityManager.FROM_SQL.put(float.class, (r, f) -> r.getFloat(f));
         EntityManager.FROM_SQL.put(Double.class, (r, f) -> r.getDouble(f));
         EntityManager.FROM_SQL.put(double.class, (r, f) -> r.getDouble(f));
-        EntityManager.FROM_SQL.put(Date.class, (r, f) -> r.getTime(f));
+        EntityManager.FROM_SQL.put(Date.class, (r, f) -> r.getTimestamp(f));
     }
 
     private Class<E> clazz;

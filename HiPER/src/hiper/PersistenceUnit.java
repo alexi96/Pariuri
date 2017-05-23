@@ -30,18 +30,24 @@ public class PersistenceUnit {
         this.connect(url, user, pass);
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     public Statement getStatement() {
         return statement;
     }
 
+    public void setStatement(Statement statement) {
+        this.statement = statement;
+    }
+
     public final void connect(String url) throws SQLException {
         this.connection = DriverManager.getConnection(url);
-        this.statement = this.connection.createStatement();
     }
 
     public final void connect(String url, String user, String pass) throws SQLException {
         this.connection = DriverManager.getConnection(url, user, pass);
-        this.statement = this.connection.createStatement();
     }
 
     public void register(Class entity) {
@@ -55,6 +61,10 @@ public class PersistenceUnit {
     }
 
     public <E> List<E> select(Class<E> clazz) throws IllegalArgumentException, SQLException {
+        return this.select(clazz, this.statement);
+    }
+
+    public <E> List<E> select(Class<E> clazz, Statement st) throws IllegalArgumentException, SQLException {
         EntityManager em = this.managers.get(clazz);
 
         if (em == null) {
@@ -62,19 +72,20 @@ public class PersistenceUnit {
         }
 
         String sql = em.selectQl();
-        ResultSet rs = this.statement.executeQuery(sql);
 
         List<E> res = new ArrayList<>();
 
-        while (rs.next()) {
-            try {
-                Constructor<E> cons = clazz.getDeclaredConstructor();
-                cons.setAccessible(true);
-                E r = cons.newInstance();
-                em.select(rs, r);
-                res.add(r);
-            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+        try (ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                try {
+                    Constructor<E> cons = clazz.getDeclaredConstructor();
+                    cons.setAccessible(true);
+                    E r = cons.newInstance();
+                    em.select(rs, r);
+                    res.add(r);
+                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
@@ -82,31 +93,38 @@ public class PersistenceUnit {
     }
 
     public <E> List<E> selectNative(Class<E> clazz, String sql) throws IllegalArgumentException, SQLException {
+        return this.selectNative(clazz, sql, this.statement);
+    }
+
+    public <E> List<E> selectNative(Class<E> clazz, String sql, Statement st) throws IllegalArgumentException, SQLException {
         EntityManager em = this.managers.get(clazz);
 
         if (em == null) {
             throw new IllegalArgumentException("No registerd table with this name.");
         }
-        
-        ResultSet rs = this.statement.executeQuery(sql);
 
         List<E> res = new ArrayList<>();
-        while (rs.next()) {
-            try {
-                Constructor<E> cons = clazz.getDeclaredConstructor();
-                cons.setAccessible(true);
-                E r = cons.newInstance();
-                em.select(rs, r);
-                res.add(r);
-            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+        try (ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                try {
+                    Constructor<E> cons = clazz.getDeclaredConstructor();
+                    cons.setAccessible(true);
+                    E r = cons.newInstance();
+                    em.select(rs, r);
+                    res.add(r);
+                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
-
         return res;
     }
 
     public <E> List<E> select(QueryBy<E> q) throws IllegalArgumentException, SQLException {
+        return this.select(q, this.statement);
+    }
+
+    public <E> List<E> select(QueryBy<E> q, Statement st) throws IllegalArgumentException, SQLException {
         EntityManager em = this.managers.get(q.clazz);
 
         if (em == null) {
@@ -114,26 +132,29 @@ public class PersistenceUnit {
         }
 
         String sql = em.selectQl(q);
-        ResultSet rs = this.statement.executeQuery(sql);
 
         List<E> res = new ArrayList<>();
-
-        while (rs.next()) {
-            try {
-                Constructor<E> cons = q.clazz.getDeclaredConstructor();
-                cons.setAccessible(true);
-                E r = cons.newInstance();
-                em.select(rs, r);
-                res.add(r);
-            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+        try (ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                try {
+                    Constructor<E> cons = q.clazz.getDeclaredConstructor();
+                    cons.setAccessible(true);
+                    E r = cons.newInstance();
+                    em.select(rs, r);
+                    res.add(r);
+                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
-
         return res;
     }
 
     public <E> E select(Class<E> type, Object... ids) throws IllegalArgumentException, SQLException {
+        return this.select(type, this.statement, ids);
+    }
+
+    public <E> E select(Class<E> type, Statement st, Object... ids) throws IllegalArgumentException, SQLException {
         EntityManager em = this.managers.get(type);
 
         if (em == null) {
@@ -141,25 +162,31 @@ public class PersistenceUnit {
         }
 
         String sql = em.selectQl(ids);
-        ResultSet rs = this.statement.executeQuery(sql);
 
-        E res = null;
+        try (ResultSet rs = st.executeQuery(sql)) {
 
-        while (rs.next()) {
-            try {
-                Constructor<E> cons = type.getDeclaredConstructor();
-                cons.setAccessible(true);
-                res = cons.newInstance();
-                em.select(rs, res);
-            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+            E res = null;
+
+            while (rs.next()) {
+                try {
+                    Constructor<E> cons = type.getDeclaredConstructor();
+                    cons.setAccessible(true);
+                    res = cons.newInstance();
+                    em.select(rs, res);
+                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        }
 
-        return res;
+            return res;
+        }
     }
 
     public void create(Object entity) throws IllegalArgumentException, SQLException {
+        this.create(entity, this.statement);
+    }
+
+    public void create(Object entity, Statement st) throws IllegalArgumentException, SQLException {
         EntityManager em = this.managers.get(entity.getClass());
         if (em == null) {
             throw new IllegalArgumentException(entity.getClass() + " not a Hiper entity");
@@ -167,13 +194,17 @@ public class PersistenceUnit {
 
         try {
             String sql = em.createQl(entity);
-            this.statement.execute(sql);
+            st.execute(sql);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void delete(Object entity) throws IllegalArgumentException, SQLException {
+        this.delete(entity, this.statement);
+    }
+
+    public void delete(Object entity, Statement st) throws IllegalArgumentException, SQLException {
         EntityManager em = this.managers.get(entity.getClass());
         if (em == null) {
             throw new IllegalArgumentException(entity.getClass() + " not a Hiper entity");
@@ -181,13 +212,17 @@ public class PersistenceUnit {
 
         try {
             String sql = em.deleteQl(entity);
-            this.statement.execute(sql);
+            st.execute(sql);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void edit(Object entity) throws IllegalArgumentException, SQLException {
+        this.edit(entity, this.statement);
+    }
+
+    public void edit(Object entity, Statement st) throws IllegalArgumentException, SQLException {
         EntityManager em = this.managers.get(entity.getClass());
         if (em == null) {
             throw new IllegalArgumentException(entity.getClass() + " not a Hiper entity");
@@ -195,17 +230,18 @@ public class PersistenceUnit {
 
         try {
             String sql = em.updateQl(entity);
-            this.statement.executeUpdate(sql);
+            st.executeUpdate(sql);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(PersistenceUnit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Deprecated
-    public int lastId() throws SQLException {
-        ResultSet res = this.statement.executeQuery("SElect LAST_INSERT_ID() from dual");
-        if (res.next()) {
-            return res.getInt(1);
+    public int lastId(Statement st) throws SQLException {
+        try (ResultSet res = st.executeQuery("SElect LAST_INSERT_ID() from dual")) {
+            if (res.next()) {
+                return res.getInt(1);
+            }
         }
         return 0;
     }
