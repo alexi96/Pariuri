@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -290,6 +291,21 @@ public class BetServer {
         return false;
     }
 
+    public List<Game> findGames(Connection con) {
+        try (Statement st = con.createStatement()) {
+            List<GameDB> all = this.pu.select(GameDB.class, st);
+            List<Game> res = new ArrayList<>(all.size());
+            
+            all.stream()
+                    .map((g) -> new Game(g.getId(), g.getName(), g.getChance(), g.getDate(), g.getDescription()))
+                    .forEach(res::add);
+            
+            return res;
+        } catch (IllegalArgumentException | SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
     public Game findGame(int id, Connection con) {
         try (Statement st = con.createStatement()) {
             GameDB c = this.pu.select(GameDB.class, st, id);
@@ -407,7 +423,7 @@ public class BetServer {
 
     public Integer createComposedTicket(ComposedTicket ticket, Collection<Ticket> simpleTickets, Connection con) {
         try (Statement st = con.createStatement()) {
-            ComposedTicketDB ct = new ComposedTicketDB(ticket.getAmmount(), ticket.getUser(), new Date(), false);
+            ComposedTicketDB ct = new ComposedTicketDB(ticket.getAmmount(), ticket.getUser(), new Date(), false, 0);
 
             this.pu.create(ct, st);
             int ctu = this.pu.lastId(st);
@@ -548,6 +564,7 @@ public class BetServer {
                 }
             }
 
+            ct.setWon(res);
             ct.setValidated(true);
             this.pu.edit(ct, st);
 
@@ -556,6 +573,82 @@ public class BetServer {
             Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public Set<Game> findGames(User user, Connection con) {
+        String sqlGames = "select g.* from game g join ticket t on (t.game = g.id) join composed_ticket ct on (t.composed_ticket = ct.id) where ct.user = " + user.getId() + " and ct.validated = true";
+        try (Statement st = con.createStatement()) {
+            List<GameDB> myGames = this.pu.selectNative(GameDB.class, sqlGames, st);
+
+            Set<Game> res = new TreeSet<>((x, y) -> x.getId() - y.getId());
+            myGames.stream()
+                    .map((g) -> Conversion.model(g, Game.class))
+                    .forEach(res::add);
+
+            return res;
+        } catch (SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return new TreeSet<>();
+    }
+
+    public ArrayList<Ticket> findTickets(Game g, boolean won, Connection con) {
+        String wstr = "= 0";
+        if (won) {
+            wstr = "!= 0";
+        }
+        String sql = "select t.* from ticket t join game g on (g.id = t.game) join composed_ticket ct on (t.composed_ticket = ct.id) where ct.validated = true and ct.won " + wstr + " and g.id = " + g.getId();
+        try (Statement st = con.createStatement()) {
+            List<TicketDB> tdbs = this.pu.selectNative(TicketDB.class, sql, st);
+            ArrayList<Ticket> res = new ArrayList<>();
+
+            tdbs.stream()
+                    .map((t) -> Conversion.model(t, Ticket.class))
+                    .forEach(res::add);
+
+            return res;
+        } catch (SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return new ArrayList<>();
+    }
+
+    public float findMonay(Game g, boolean won, Connection con) {
+        String wstr = "= 0";
+        if (won) {
+            wstr = "!= 0";
+        }
+        String sql = "select ct.* "
+                + "from ticket t "
+                + "join game g on (g.id = t.game) "
+                + "join composed_ticket ct on (t.composed_ticket = ct.id) "
+                + "where "
+                + "ct.validated = true "
+                + "and ct.won " + wstr + " and g.id = " + g.getId();
+
+        try (Statement st = con.createStatement()) {
+            List<ComposedTicketDB> tdbs = this.pu.selectNative(ComposedTicketDB.class, sql, st);
+
+            Set<ComposedTicketDB> all = new TreeSet<>((x, y) -> x.getId() - y.getId());
+            all.addAll(tdbs);
+            
+            float res = 0;
+            for (ComposedTicketDB t : all) {
+                if (won) {
+                    res += t.getWon();
+                } else {
+                    res += t.getAmmount();
+                }
+            }
+
+            return res;
+        } catch (SQLException ex) {
+            Logger.getLogger(BetServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return 0;
     }
 
     public void forgotPassword(String username, String email, DataSource ds) {

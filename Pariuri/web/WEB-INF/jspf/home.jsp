@@ -1,3 +1,6 @@
+<%@page import="java.util.Collection"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.TreeSet"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="model.Game"%>
@@ -21,18 +24,49 @@
     Connection cn = null;
     try {
         cn = this.ds.getConnection();
+
+        MainController con = MainController.getInstance();
+        Set<ComposedTicket> all = con.findComposedTickets(new User(user.getId()), cn);
 %>
 <h1>Welcome ${user.username}</h1>
 <form action="${pageContext.request.contextPath}/run/logout" method="post">
     <input type="submit" value="Log out">
 </form>
+<form action="${pageContext.request.contextPath}/allStatistics.jsp" method="post">
+    <input type="submit" value="See all games">
+</form>
 <div>
-    <header>
-        Your tickets
-    </header>
+    <h1>
+        Your games
+    </h1>
     <%
-        MainController con = MainController.getInstance();
-        Set<ComposedTicket> all = con.findComposedTickets(new User(user.getId()), cn);
+        Set<Game> myGames = con.findGames(new User(user.getId()), cn);
+        for (Game g : myGames) {
+            Collection<Ticket> wonTs = con.findTickets(g, true, cn);
+            Collection<Ticket> lostTs = con.findTickets(g, false, cn);
+            float wonVal = con.findMonay(g, true, cn);
+            float lostVal = con.findMonay(g, false, cn);
+    %>
+    <div>
+        <h2>
+            <%=g%>
+        </h2>
+        <p>
+            Simple ticket win/lost: <%=wonTs.size()%>/<%=lostTs.size()%> <%=(float) wonTs.size() * 100 / (float) (lostTs.size() + wonTs.size())%>%
+        </p>
+        <p>
+            Sum involved in game win/lost: <%=wonVal%>/<%=lostVal%> <%=wonVal * 100 / (wonVal + lostVal)%>%
+        </p>
+    </div>
+    <%
+        }
+    %>
+</div>
+<div>
+    <h1>
+        Your tickets
+    </h1>
+    <%
         for (ComposedTicket ct : all) {
             String style = "background-color: " + (ct.isValidated() ? "green" : "");
     %>
@@ -63,7 +97,7 @@
         try {
             cn.close();
         } catch (SQLException ex) {
-ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 %>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2017 at 08:43 AM
+-- Generation Time: May 23, 2017 at 08:27 PM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.23
 
@@ -41,11 +41,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `createStatisticTypes` ()  NO SQL
 BEGIN
 DELETE FROM `statistic_type`;
 ALTER TABLE `statistic_type` AUTO_INCREMENT = 1;
-INSERT INTO `statistic_type`(`name`) VALUES ('Winner');
-INSERT INTO `statistic_type`(`name`) VALUES ('Winner`s score');
-INSERT INTO `statistic_type`(`name`) VALUES ('Loser`s score');
-INSERT INTO `statistic_type`(`name`) VALUES ('Time');
-INSERT INTO `statistic_type`(`name`) VALUES ('First kill');
+INSERT INTO `statistic_type`(`name`, `deviation`, `exact_multiply`, `medium_multiply`, `far_multiply`) VALUES ('Winner', 0, 2, 2, 2);
+INSERT INTO `statistic_type`(`name`, `deviation`, `exact_multiply`, `medium_multiply`, `far_multiply`) VALUES ('Winner`s score', 3, 5, 2, 1.5);
+INSERT INTO `statistic_type`(`name`, `deviation`, `exact_multiply`, `medium_multiply`, `far_multiply`) VALUES ('Loser`s score', 3, 5, 2, 1.5);
+INSERT INTO `statistic_type`(`name`, `deviation`, `exact_multiply`, `medium_multiply`, `far_multiply`) VALUES ('Time', 5, 5, 3, 1.5);
+INSERT INTO `statistic_type`(`name`, `deviation`, `exact_multiply`, `medium_multiply`, `far_multiply`) VALUES ('First kill', 0, 2, 2, 2);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeKeys` ()  NO SQL
@@ -71,6 +71,7 @@ DELIMITER ;
 
 CREATE TABLE `composed_ticket` (
   `id` int(11) NOT NULL,
+  `ammount` float NOT NULL,
   `user` int(11) NOT NULL,
   `time` datetime NOT NULL,
   `validated` tinyint(1) NOT NULL
@@ -80,11 +81,13 @@ CREATE TABLE `composed_ticket` (
 -- Dumping data for table `composed_ticket`
 --
 
-INSERT INTO `composed_ticket` (`id`, `user`, `time`, `validated`) VALUES
-(11, 16, '2017-04-26 00:00:00', 1),
-(12, 16, '2017-04-26 00:00:00', 1),
-(13, 16, '2017-04-28 00:00:00', 1),
-(14, 21, '2017-04-28 00:00:00', 1);
+INSERT INTO `composed_ticket` (`id`, `ammount`, `user`, `time`, `validated`) VALUES
+(30, 1, 24, '1970-01-01 15:17:37', 1),
+(31, 1, 16, '1970-01-01 15:22:40', 1),
+(32, 1, 16, '1970-01-01 15:23:34', 1),
+(33, 1, 24, '1970-01-01 15:29:17', 1),
+(34, 100, 16, '1970-01-01 11:07:17', 1),
+(35, 2, 16, '2017-05-19 11:16:24', 0);
 
 -- --------------------------------------------------------
 
@@ -127,11 +130,14 @@ CREATE TABLE `game` (
 --
 
 INSERT INTO `game` (`id`, `name`, `chance`, `date`, `description`) VALUES
-(7, 'Bucharest dreamhack 2017', 10, '2017-01-01 08:22:00', 'Bucharest dreamhack 2017'),
-(8, 'test', 123, '2017-01-01 08:22:00', 'Description here!'),
-(9, 'Test 2', 50, '2017-04-28 09:02:43', 'Description here!'),
-(10, 'ShooterQ 2017', 40, '2017-05-01 10:00:00', 'ShooterQ 2017 la data de 1/5/2017 10:00'),
-(11, 'Death mach', 30, '2017-05-07 12:00:00', 'Death mach!!!');
+(21, 'Bucharest dreamhack 2017', 45, '2017-05-07 12:00:00', 'Description here!'),
+(26, 'Joc1', 50, '2017-05-08 12:00:00', 'Description here!'),
+(27, 'test game', 50, '2017-05-07 12:00:00', 'Description here!'),
+(28, 'test game2', 60, '2017-01-01 08:22:00', 'Description here!'),
+(29, 'test game3', 40, '2017-05-08 12:00:00', 'Description here!'),
+(30, 'Joc2', 25, '2017-01-01 08:22:00', 'Description here!'),
+(31, 'Joc2', 40, '2017-01-01 08:22:00', 'Description here!'),
+(32, 'Joc3', 50, '2017-01-01 08:22:00', 'Description here!');
 
 -- --------------------------------------------------------
 
@@ -150,16 +156,22 @@ CREATE TABLE `plays` (
 --
 
 INSERT INTO `plays` (`id`, `game`, `team`) VALUES
-(3, 7, 2),
-(4, 7, 1),
-(5, 8, 1),
-(6, 8, 2),
-(7, 9, 1),
-(8, 9, 2),
-(9, 10, 3),
-(10, 10, 4),
-(11, 11, 1),
-(12, 11, 2);
+(1, 21, 2),
+(2, 21, 1),
+(3, 26, 4),
+(4, 26, 3),
+(5, 27, 7),
+(6, 27, 8),
+(7, 28, 7),
+(8, 28, 8),
+(9, 29, 7),
+(10, 29, 8),
+(11, 30, 4),
+(12, 30, 1),
+(13, 31, 8),
+(14, 31, 3),
+(15, 32, 1),
+(16, 32, 1);
 
 -- --------------------------------------------------------
 
@@ -179,31 +191,41 @@ CREATE TABLE `result` (
 --
 
 INSERT INTO `result` (`id`, `value`, `game`, `type`) VALUES
-(1, 3, 7, 1),
-(2, 3, 7, 2),
-(3, 3, 7, 3),
-(4, 3, 7, 4),
-(5, 3, 7, 5),
-(6, 1, 8, 1),
-(7, 2, 8, 2),
-(8, 5, 8, 3),
-(9, 20, 8, 4),
-(10, 2, 8, 5),
-(11, 1, 9, 1),
-(12, 1, 9, 2),
-(13, 1, 9, 3),
-(14, 5, 9, 4),
-(15, 1, 9, 5),
-(16, 1, 10, 1),
-(17, 10, 10, 2),
-(18, 30, 10, 3),
-(19, 9, 10, 4),
-(20, 1, 10, 5),
-(21, 2, 11, 1),
-(22, 50, 11, 2),
-(23, 30, 11, 3),
-(24, 9, 11, 4),
-(25, 2, 11, 5);
+(1, 2, 21, 1),
+(2, 10, 21, 2),
+(3, 5, 21, 3),
+(4, 34, 21, 4),
+(5, 2, 21, 5),
+(6, 1, 26, 1),
+(7, 10, 26, 2),
+(8, 5, 26, 3),
+(9, 20, 26, 4),
+(10, 2, 26, 5),
+(11, 1, 27, 1),
+(12, 10, 27, 2),
+(13, 5, 27, 3),
+(14, 7, 27, 4),
+(15, 1, 27, 5),
+(16, 1, 28, 1),
+(17, 10, 28, 2),
+(18, 5, 28, 3),
+(19, 10, 28, 4),
+(20, 1, 28, 5),
+(21, 1, 29, 1),
+(22, 10, 29, 2),
+(23, 5, 29, 3),
+(24, 10, 29, 4),
+(25, 1, 29, 5),
+(26, 1, 30, 1),
+(27, 1, 30, 2),
+(28, 1, 30, 3),
+(29, 1, 30, 4),
+(30, 1, 30, 5),
+(31, 1, 31, 1),
+(32, 10, 31, 2),
+(33, 10, 31, 3),
+(34, 10, 31, 4),
+(35, 2, 31, 5);
 
 -- --------------------------------------------------------
 
@@ -214,19 +236,22 @@ INSERT INTO `result` (`id`, `value`, `game`, `type`) VALUES
 CREATE TABLE `statistic_type` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `deviation` float NOT NULL
+  `deviation` float NOT NULL,
+  `exact_multiply` float NOT NULL,
+  `medium_multiply` float NOT NULL,
+  `far_multiply` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `statistic_type`
 --
 
-INSERT INTO `statistic_type` (`id`, `name`, `deviation`) VALUES
-(1, 'Winner', 0),
-(2, 'Winner`s score', 3),
-(3, 'Loser`s score', 3),
-(4, 'Time', 5),
-(5, 'First kill', 0);
+INSERT INTO `statistic_type` (`id`, `name`, `deviation`, `exact_multiply`, `medium_multiply`, `far_multiply`) VALUES
+(1, 'Winner', 0, 2, 2, 2),
+(2, 'Winner`s score', 3, 5, 2, 1.5),
+(3, 'Loser`s score', 3, 5, 2, 1.5),
+(4, 'Time', 5, 5, 3, 1.5),
+(5, 'First kill', 0, 2, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -249,7 +274,9 @@ INSERT INTO `team` (`id`, `name`, `country`, `image`) VALUES
 (1, 'Rocket', 1, NULL),
 (2, 'Virtus.pro', 2, NULL),
 (3, 'ViCi', 4, NULL),
-(4, 'UYA', 5, NULL);
+(4, 'UYA', 5, NULL),
+(7, 'test1', 1, NULL),
+(8, 'test2', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -259,7 +286,6 @@ INSERT INTO `team` (`id`, `name`, `country`, `image`) VALUES
 
 CREATE TABLE `ticket` (
   `id` int(11) NOT NULL,
-  `ammount` float NOT NULL,
   `value` float NOT NULL,
   `operation` tinyint(4) NOT NULL,
   `game` int(11) NOT NULL,
@@ -271,15 +297,26 @@ CREATE TABLE `ticket` (
 -- Dumping data for table `ticket`
 --
 
-INSERT INTO `ticket` (`id`, `ammount`, `value`, `operation`, `game`, `composed_ticket`, `type`) VALUES
-(1, 100, 2, 0, 8, 11, 1),
-(2, 500, 50, 1, 8, 11, 2),
-(3, 2, 2, 0, 8, 12, 1),
-(4, 500, 1, 0, 9, 13, 1),
-(5, 500, 1, 0, 9, 13, 5),
-(6, 500, 1, 0, 10, 14, 1),
-(7, 100, 2, 0, 11, 14, 1),
-(8, 50, 10, 2, 10, 14, 4);
+INSERT INTO `ticket` (`id`, `value`, `operation`, `game`, `composed_ticket`, `type`) VALUES
+(1, 1, 0, 30, 30, 1),
+(2, 1, 0, 30, 30, 2),
+(3, 1, 0, 30, 30, 3),
+(4, 1, 0, 30, 30, 4),
+(5, 1, 0, 30, 30, 5),
+(6, 1, 0, 30, 31, 1),
+(7, 1, 0, 30, 32, 1),
+(8, 1, 0, 30, 32, 2),
+(9, 1, 0, 30, 32, 3),
+(10, 1, 0, 30, 32, 4),
+(11, 1, 0, 30, 32, 5),
+(12, 1, 0, 30, 33, 1),
+(13, 1, 0, 30, 33, 2),
+(14, 2, 0, 30, 33, 3),
+(15, 1, 0, 30, 33, 4),
+(16, 1, 0, 30, 33, 5),
+(17, 1, 0, 31, 34, 1),
+(18, 10, 1, 31, 34, 2),
+(19, 10, 1, 31, 34, 4);
 
 -- --------------------------------------------------------
 
@@ -304,7 +341,8 @@ INSERT INTO `user` (`id`, `username`, `password`, `first_name`, `last_name`, `em
 (15, 'alexi96', 'pass', 'Radu', 'Ioan-Alexandru', 'alex_i96@yahoo.com'),
 (16, 'admin', 'pass', 'Radu', 'Ioan-Alexandru', 'alex_i96@yahoo.com'),
 (17, 'delgado2009', '123456', 'Alin', 'Ivascu', 'catal.warrior2@gmail.com'),
-(21, 'test', 'pass', 'Radu', 'Ioan-Alexandru', 'alex_i96@yahoo.com');
+(22, 'ionm', '123456', 'Mircea', 'Ion', 'alex_i96@yahoo.com'),
+(24, 'test', 'test', 'Radu', 'Ioan-Alexandru', 'alex_i96@yahoo.com');
 
 --
 -- Indexes for dumped tables
@@ -381,7 +419,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `composed_ticket`
 --
 ALTER TABLE `composed_ticket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT for table `country`
 --
@@ -391,17 +429,17 @@ ALTER TABLE `country`
 -- AUTO_INCREMENT for table `game`
 --
 ALTER TABLE `game`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT for table `plays`
 --
 ALTER TABLE `plays`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `result`
 --
 ALTER TABLE `result`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT for table `statistic_type`
 --
@@ -411,17 +449,17 @@ ALTER TABLE `statistic_type`
 -- AUTO_INCREMENT for table `team`
 --
 ALTER TABLE `team`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `ticket`
 --
 ALTER TABLE `ticket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
 -- Constraints for dumped tables
 --
